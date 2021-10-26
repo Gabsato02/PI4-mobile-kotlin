@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobile">
         <activity
+            android:name=".activities.main.MainActivity"
+            android:exported="true" />
+        <activity
             android:name=".activities.login.LoginActivity"
             android:exported="true">
             <intent-filter>

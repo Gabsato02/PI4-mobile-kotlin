@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <item
+        android:id="@+id/bottomNavHomeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_castle_solid"
+        android:title="Home"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/bottomNavBagButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_coins_solid"
+        android:title="Carrinho"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/bottomNavHistoryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_hourglass_solid"
+        android:title="Histórico"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/bottomNavProfileButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_knight_solid"
+        android:title="Perfil"
+        app:showAsAction="always" />
+</menu>
