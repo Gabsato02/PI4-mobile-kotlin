@@ -13,8 +13,13 @@
             android:name=".activities.main.MainActivity"
             android:exported="true" />
         <activity
+            android:name=".activities.register.Register"
+            android:exported="true"
+            android:parentActivityName=".activities.login.LoginActivity"/>
+        <activity
             android:name=".activities.login.LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
