@@ -19,7 +19,8 @@
         <entry key="..\:/PI4-mobile-kotlin/app/src/main/res/layout/spotlight_card.xml" value="0.2" />
         <entry key="..\:/PI4-mobile-kotlin/app/src/main/res/menu/bottom_navigation.xml" value="0.2" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/drawable/border.xml" value="0.1" />
-        <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/activity_login.xml" value="0.2" />
+        <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/activity_register.xml" value="0.25" />
       </map>
     </option>
   </component>

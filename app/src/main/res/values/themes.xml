@@ -15,8 +15,8 @@
         <!-- Font -->
         <item name="android:textViewStyle">@font/medievalsharp</item>
         <item name="fontFamily">@font/medievalsharp</item>
-        <!-- Hide Titlebar -->
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
+<!--        &lt;!&ndash; Hide Titlebar &ndash;&gt;-->
+<!--        <item name="windowNoTitle">true</item>-->
+<!--        <item name="windowActionBar">false</item>-->
     </style>
 </resources>
