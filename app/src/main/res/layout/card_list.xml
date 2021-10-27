@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/cardListContainer"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_marginTop="16dp"
     android:orientation="vertical">
 
@@ -15,10 +15,13 @@
         android:textColor="@color/primary"
         android:textSize="24dp" />
 
-    <LinearLayout
-        android:id="@+id/cardListRows"
+    <GridView
+        android:id="@+id/cardListGrid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"></LinearLayout>
+        android:layout_height="wrap_content"
+        android:gravity="fill_horizontal"
+        android:horizontalSpacing="16dp"
+        android:numColumns="2"
+        android:verticalSpacing="16dp"></GridView>
 
 </LinearLayout>
