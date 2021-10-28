@@ -2,6 +2,7 @@ package br.senac.mobile.activities.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import androidx.fragment.app.Fragment
 import br.senac.mobile.R
 import br.senac.mobile.databinding.ActivityMainBinding
@@ -28,5 +29,10 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment).commit()
             true
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.options_menu, menu)
+        return true
     }
 }
