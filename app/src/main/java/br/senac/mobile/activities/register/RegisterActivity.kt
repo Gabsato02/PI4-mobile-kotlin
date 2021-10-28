@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import br.senac.mobile.databinding.ActivityRegisterBinding
 
-class Register : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
     lateinit var binding: ActivityRegisterBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
