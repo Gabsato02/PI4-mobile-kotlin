@@ -5,31 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import br.senac.mobile.adapters.CategoryAdapter
+import br.senac.mobile.adapters.CategoryCardAdapter
 import br.senac.mobile.databinding.*
 import br.senac.mobile.models.Category
 
 class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        // Adição manual
-        val spotlightCardBinding = SpotlightCardBinding.inflate(layoutInflater)
-        spotlightCardBinding.spotlightCardTitle.text = "Loja Principal"
-        binding.homeLinearLayout.addView(spotlightCardBinding.root)
-
-        val cardListBinding = CardListBinding.inflate(layoutInflater)
-        cardListBinding.cardListTitle.text = "Categorias"
-
         // Adapter
         var arrayList: ArrayList<Category> = ArrayList()
         arrayList = setCategoryList()
-        val categoryAdapter: CategoryAdapter? = activity?.let { CategoryAdapter(it, arrayList!!) }
+        val categoryAdapter: CategoryCardAdapter? = activity?.let { CategoryCardAdapter(it, arrayList!!) }
 
-
-        cardListBinding.cardListGrid.adapter = categoryAdapter
-        binding.homeLinearLayout.addView(cardListBinding.root)
-
+        binding.homeCardListGrid.adapter = categoryAdapter
         return binding.root
     }
 

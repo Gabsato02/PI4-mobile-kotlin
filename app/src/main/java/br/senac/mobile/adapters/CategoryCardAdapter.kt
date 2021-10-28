@@ -10,7 +10,7 @@ import br.senac.mobile.fragments.HomeFragment
 import br.senac.mobile.models.Category
 import kotlin.collections.ArrayList
 
-public class CategoryAdapter(val context: Context, private val categoryList: ArrayList<Category>): BaseAdapter() {
+public class CategoryCardAdapter(val context: Context, private val categoryList: ArrayList<Category>): BaseAdapter() {
 
     override fun getItem(position: Int): Any {
         return categoryList.get(position)

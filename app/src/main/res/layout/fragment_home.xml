@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/homeFrameLayout"
     android:layout_width="match_parent"
@@ -22,6 +23,48 @@
             android:layout_marginRight="32dp"
             android:divider="@drawable/horizontal_divider"
             android:orientation="vertical"
-            android:showDividers="middle"></LinearLayout>
+            android:showDividers="middle">
+
+            <TextView
+                android:id="@+id/homeSpotlightCardTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Loja Principal"
+                android:textColor="@color/primary"
+                android:textSize="24dp" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                app:cardCornerRadius="8dp">
+
+                <ImageView
+                    android:id="@+id/homeSpotlightCardImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/bg_placeholder" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/homeCardListTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Categorias"
+                android:textColor="@color/primary"
+                android:textSize="24dp" />
+
+            <GridView
+                android:id="@+id/homeCardListGrid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="fill_horizontal"
+                android:horizontalSpacing="16dp"
+                android:numColumns="2"
+                android:paddingBottom="16dp"
+                android:verticalSpacing="16dp"></GridView>
+        </LinearLayout>
     </ScrollView>
 </FrameLayout>
