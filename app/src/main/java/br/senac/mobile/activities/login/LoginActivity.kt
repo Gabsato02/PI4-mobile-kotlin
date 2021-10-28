@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import br.senac.mobile.activities.main.MainActivity
-import br.senac.mobile.activities.register.Register
+import br.senac.mobile.activities.register.RegisterActivity
 import br.senac.mobile.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -15,13 +15,13 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-        binding.relativeLayoutButton.setOnClickListener {
+        binding.loginButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
         binding.textNewUser.setOnClickListener {
-            val intent = Intent(this, Register::class.java)
+            val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
     }

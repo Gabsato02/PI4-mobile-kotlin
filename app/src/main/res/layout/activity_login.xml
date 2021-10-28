@@ -73,38 +73,11 @@
             android:textColorLink="@color/primary" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <RelativeLayout
-        android:id="@+id/relativeLayoutButton"
-        android:layout_width="140dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="64dp"
-        android:background="@drawable/old_golden_texture"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="132dp"
-            android:layout_height="52dp"
-            android:background="@drawable/medium_golden_texture"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="ENTRAR"
-            android:textColor="@color/primary"
-            android:textSize="24sp" />
-    </RelativeLayout>
-
     <TextView
         android:id="@+id/textNewUser"
         android:layout_width="220dp"
         android:layout_height="0dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="16dp"
         android:text="Aventureiro novo na cidade? Clique aqui para criar um registro"
@@ -113,7 +86,21 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutButton" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/loginButton"
+        android:layout_width="152dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="58dp"
+        android:background="@drawable/paper_texture"
+        android:text="ENTRAR"
+        android:textColor="@color/primary"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
