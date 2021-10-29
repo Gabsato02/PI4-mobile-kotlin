@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import br.senac.mobile.R
-import br.senac.mobile.fragments.HomeFragment
 import br.senac.mobile.models.Category
 import kotlin.collections.ArrayList
 
@@ -25,7 +24,7 @@ public class CategoryCardAdapter(val context: Context, private val categoryList:
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        var view: View = View.inflate(context, R.layout.card, null)
+        var view: View = View.inflate(context, R.layout.category_card, null)
         var text: TextView = view.findViewById(R.id.cardTextView)
         var category: Category = categoryList.get(position)
         text.text = category.name
