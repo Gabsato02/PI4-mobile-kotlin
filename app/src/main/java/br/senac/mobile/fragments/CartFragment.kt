@@ -20,6 +20,12 @@ class CartFragment : Fragment() {
         cartCardBinding.itemImage.setImageResource(R.drawable.sword)
         binding.cartLinearLayout.addView(cartCardBinding.root)
 
+        cartCardBinding.cartCard.setOnClickListener {
+            val fragment = ItemFragment()
+            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment).commit()
+            true
+        }
+
         return binding.root
     }
 }
