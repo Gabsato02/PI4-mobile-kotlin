@@ -26,6 +26,12 @@ class CartFragment : Fragment() {
             true
         }
 
+        binding.button.setOnClickListener {
+            val fragment = PurchaseFragment()
+            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment).commit()
+            true
+        }
+
         return binding.root
     }
 }

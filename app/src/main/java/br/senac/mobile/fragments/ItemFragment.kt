@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.marginBottom
 import br.senac.mobile.databinding.FragmentItemBinding
 import br.senac.mobile.databinding.TraitsCharacCardBinding
 
