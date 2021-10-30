@@ -54,13 +54,15 @@ class CartFragment : Fragment() {
 
         cartCardBinding.cartCard.setOnClickListener {
             val fragment = ItemFragment()
-            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment).commit()
+            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
+                .addToBackStack("cart").commit()
             true
         }
 
         binding.button.setOnClickListener {
             val fragment = PurchaseFragment()
-            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment).commit()
+            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
+                .addToBackStack("cart").commit()
             true
         }
 

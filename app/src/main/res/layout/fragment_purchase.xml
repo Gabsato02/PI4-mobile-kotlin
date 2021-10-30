@@ -23,6 +23,7 @@
                 android:paddingTop="24dp"
                 android:paddingRight="24dp"
                 android:text="TOTAL: 22 PO"
+                android:textColor="@color/primary"
                 android:textSize="24sp" />
         </LinearLayout>
     </ScrollView>
