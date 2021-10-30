@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bottom_separator"
     android:elevation="4dp"
-    android:orientation="vertical"
-    android:background="@drawable/separatorborder">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,36 +14,46 @@
 
         <ImageView
             android:id="@+id/purchaseCardImageView"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
             android:adjustViewBounds="true"
             android:cropToPadding="false"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
             android:scaleType="fitStart"
             app:srcCompat="@drawable/sword" />
 
         <TextView
             android:id="@+id/purchaseCardNameText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight="10"
+            android:layout_weight="1"
             android:gravity="clip_vertical|right|center_vertical"
-            android:text="Nome do Item" />
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Nome do Item"
+            android:textColor="@color/primary"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/purchaseCardValueText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             android:layout_marginRight="24dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight="1"
+            android:layout_weight="0.5"
             android:gravity="right|center_vertical"
-            android:text="Preço" />
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Preço"
+            android:textColor="@color/primary"
+            android:textSize="18sp" />
     </LinearLayout>
 </LinearLayout>

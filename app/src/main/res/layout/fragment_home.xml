@@ -5,6 +5,7 @@
     android:id="@+id/homeFrameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:tag="home"
     tools:context=".fragments.HomeFragment">
 
     <ScrollView
