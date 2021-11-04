@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import br.senac.mobile.R
 import br.senac.mobile.databinding.FragmentCartBinding
 import br.senac.mobile.databinding.ShoppingCartCardBinding
@@ -16,6 +17,10 @@ class CartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentCartBinding.inflate(inflater, container, false)
+
+        val mainActivity = activity as AppCompatActivity
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        mainActivity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow)
 
         val cartCardBinding = ShoppingCartCardBinding.inflate(layoutInflater)
         val cartCardBinding2 = ShoppingCartCardBinding.inflate(layoutInflater)

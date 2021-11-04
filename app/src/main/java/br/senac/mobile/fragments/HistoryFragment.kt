@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import br.senac.mobile.R
 import br.senac.mobile.databinding.FragmentHistoryBinding
@@ -17,6 +18,10 @@ class HistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentHistoryBinding.inflate(inflater, container, false)
+
+        val mainActivity = activity as AppCompatActivity
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        mainActivity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow)
 
         val historyCardBinding = HistoryCardBinding.inflate(layoutInflater)
         val historyCardBinding2 = HistoryCardBinding.inflate(layoutInflater)

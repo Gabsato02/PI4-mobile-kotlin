@@ -17,12 +17,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(getDrawable(R.drawable.ic_arrow))
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         var fragment: Fragment = HomeFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
+        supportFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment, "home")
             .addToBackStack("home").commit()
 
         binding.bottomNavigationView.setOnItemSelectedListener {
@@ -46,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            supportFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
+            supportFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment, currentFragment)
                 .addToBackStack(currentFragment).commit()
             true
         }
@@ -67,5 +65,22 @@ class MainActivity : AppCompatActivity() {
             else -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHomeButton).setChecked(true)
         }
         return true
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val isHome = supportFragmentManager.findFragmentByTag("home")
+
+        if (isHome?.isVisible == false) {
+            var tag = supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name
+            when(tag) {
+                "cart" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavBagButton).setChecked(true)
+                "history" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHistoryButton).setChecked(true)
+                "profile" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavProfileButton).setChecked(true)
+                else -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHomeButton).setChecked(true)
+            }
+        } else {
+            binding.bottomNavigationView.menu.findItem(R.id.bottomNavHomeButton).setChecked(true)
+        }
     }
 }

@@ -11,10 +11,16 @@ import br.senac.mobile.databinding.*
 import br.senac.mobile.models.Category
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 
 class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        val mainActivity = activity as AppCompatActivity
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
         // Adapter
         var arrayList: ArrayList<Category> = ArrayList()
         arrayList = setCategoryList()

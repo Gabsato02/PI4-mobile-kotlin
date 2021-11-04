@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import br.senac.mobile.R
 import br.senac.mobile.databinding.FragmentPurchaseBinding
 import br.senac.mobile.databinding.PurchaseCardBinding
@@ -15,6 +16,10 @@ class PurchaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentPurchaseBinding.inflate(inflater, container, false)
+
+        val mainActivity = activity as AppCompatActivity
+        mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        mainActivity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow)
 
         val purchaseCardBinding = PurchaseCardBinding.inflate(layoutInflater)
         val purchaseCard2Binding = PurchaseCardBinding.inflate(layoutInflater)
