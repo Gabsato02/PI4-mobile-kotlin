@@ -10,8 +10,9 @@
         android:id="@+id/cardImageView"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/bg_placeholder" />
+        android:adjustViewBounds="true"
+        android:cropToPadding="false"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/cardTextView"
