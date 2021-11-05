@@ -11,7 +11,20 @@ import br.senac.mobile.databinding.CatalogItemBinding
 import br.senac.mobile.databinding.CatalogTitleBinding
 import br.senac.mobile.databinding.FragmentStoreCatalogBinding
 
+private const val ARG_PARAM1 = "catalogType"
+private const val ARG_PARAM2 = "catalogId"
+
 class StoreCatalogFragment : Fragment() {
+    private var catalogType: String? = null
+    private var catalogId: Int? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            catalogType = it.getString(ARG_PARAM1)
+            catalogId = it.getInt(ARG_PARAM2)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,5 +78,15 @@ class StoreCatalogFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    companion object {
+        @JvmStatic fun newInstance(catalogType: String, catalogId: Int) =
+            StoreCatalogFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, catalogType)
+                    putInt(ARG_PARAM2, catalogId)
+                }
+            }
     }
 }
