@@ -37,4 +37,9 @@ class API {
         get() {
             return retrofit.create(OrderService::class.java)
         }
+
+    val user: UserService
+        get() {
+            return retrofit.create(UserService::class.java)
+        }
 }
