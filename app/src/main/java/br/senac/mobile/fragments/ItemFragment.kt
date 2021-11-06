@@ -1,51 +1,135 @@
 package br.senac.mobile.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import br.senac.mobile.R
-import br.senac.mobile.activities.main.MainActivity
 import br.senac.mobile.databinding.FragmentItemBinding
 import br.senac.mobile.databinding.TraitsCharacCardBinding
+import br.senac.mobile.models.Item
+import br.senac.mobile.services.API
+import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.Exception
 
-class ItemFragment : Fragment() {
+private const val ARG_PARAM1 = "itemId"
+
+class ItemFragment: Fragment() {
+    private var itemId: Int = 0
+    private lateinit var binding: FragmentItemBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            itemId = it.getInt(ARG_PARAM1)
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentItemBinding.inflate(inflater, container, false)
+        binding = FragmentItemBinding.inflate(inflater, container, false)
 
         val mainActivity = activity as AppCompatActivity
         mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mainActivity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow)
 
-        val itemFragTraitLinearLayout = binding.itemFragTraitLinearLayout
-        val itemFragCharacteristicLinearLayout = binding.itemFragCharacteristicLinearLayout
-
-        val traitsCard = TraitsCharacCardBinding.inflate(layoutInflater)
-        val characteristicsCard = TraitsCharacCardBinding.inflate(layoutInflater)
-        val characteristicsCard2 = TraitsCharacCardBinding.inflate(layoutInflater)
-        val characteristicsCard3 = TraitsCharacCardBinding.inflate(layoutInflater)
-
-        traitsCard.traitsCharacCardNameText.text = "Traço teste"
-        traitsCard.traitsCharacCardDescriptionText.text = "Esse é o traço teste"
-
-        itemFragTraitLinearLayout.addView(traitsCard.root)
-
-        characteristicsCard.traitsCharacCardNameText.text = "Característica teste"
-        characteristicsCard.traitsCharacCardDescriptionText.text = "Essa é a característica teste"
-        characteristicsCard2.traitsCharacCardNameText.text = "Característica teste"
-        characteristicsCard2.traitsCharacCardDescriptionText.text = "Essa é a característica teste"
-        characteristicsCard3.traitsCharacCardNameText.text = "Característica teste"
-        characteristicsCard3.traitsCharacCardDescriptionText.text = "Essa é a característica teste"
-
-        itemFragCharacteristicLinearLayout.addView(characteristicsCard.root)
-        itemFragCharacteristicLinearLayout.addView(characteristicsCard2.root)
-        itemFragCharacteristicLinearLayout.addView(characteristicsCard3.root)
-
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getSingleItem()
+    }
+
+    private fun updateUI(item: Item) {
+        binding.itemFragNameText.text = item.name
+        binding.itemFragPriceText.text = "${item.price} PO"
+        binding.itemFragDescriptionText.text = item.description
+        binding.itemFragTraitLabel.text = "Traços"
+        binding.itemFragCharacteristicLabel.text = "Características"
+        binding.itemFragmentBagButton.visibility = View.VISIBLE
+
+        item.traits.forEach {
+            val traitsCard  = TraitsCharacCardBinding.inflate(layoutInflater)
+            traitsCard.traitsCharacCardNameText.text = it.name
+            traitsCard.traitsCharacCardDescriptionText.text = it.description
+            binding.itemFragTraitLinearLayout.addView(traitsCard.root)
+        }
+
+        item.characteristics.forEach {
+            val characteristicCard = TraitsCharacCardBinding.inflate(layoutInflater)
+            characteristicCard.traitsCharacCardNameText.text = "${it.name} - ${it.characteristics_value}"
+            characteristicCard.traitsCharacCardDescriptionText.text = it.description
+            binding.itemFragCharacteristicLinearLayout.addView(characteristicCard.root)
+        }
+
+        Picasso
+            .get()
+            .load("${API().baseUrl}image/item/${item.id}")
+            .into(binding.itemFragCardImageView, object : com.squareup.picasso.Callback {
+                override fun onSuccess() {
+                    binding.itemFragCardImageProgressBar.visibility = View.GONE
+                }
+
+                override fun onError(e: Exception?) {
+                    binding.itemFragCardImageProgressBar.visibility = View.GONE
+                }
+            })
+
+        binding.itemFragmentBagButton.setOnClickListener {
+            val fragment = CartFragment()
+            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
+                .addToBackStack("home").commit()
+            true
+        }
+    }
+
+    private fun getSingleItem() {
+        val mainActivity = activity as AppCompatActivity
+
+        val callback = object: Callback<Item> {
+            override fun onResponse(call: Call<Item>, response: Response<Item>) {
+                binding.itemFragCardProgressBar.visibility = View.GONE
+
+                if (response.isSuccessful) {
+                    val item = response.body()
+                    item?.let { updateUI(item) }
+                } else {
+                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                        "Não é possível atualizar os dados.",
+                        Snackbar.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Item>, t: Throwable) {
+                binding.itemFragCardProgressBar.visibility = View.GONE
+
+                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                    "Não foi possível conectar ao servidor.",
+                    Snackbar.LENGTH_LONG).show()
+                Log.e("ERROR", "Falha ao executar serviço", t)
+            }
+        }
+
+        API().item.getItem(itemId).enqueue(callback)
+        binding.itemFragCardProgressBar.visibility = View.VISIBLE
+    }
+
+    companion object {
+        @JvmStatic fun newInstance(itemId: Int) =
+            ItemFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_PARAM1, itemId)
+                }
+            }
     }
 }

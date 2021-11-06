@@ -27,4 +27,9 @@ class API {
         get() {
             return retrofit.create(CategoryService::class.java)
         }
+
+    val item: ItemService
+        get() {
+            return retrofit.create(ItemService::class.java)
+        }
 }

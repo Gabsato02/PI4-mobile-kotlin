@@ -55,7 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="Nome"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/traitsCharacCardDescriptionText"

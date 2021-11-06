@@ -71,7 +71,7 @@ class StoreCatalogFragment : Fragment() {
         binding.catalogContentLinearLayout.addView(catalogItemBinding3.root, 1)
 
         binding.catalogContentLinearLayout.setOnClickListener {
-            val fragment = ItemFragment()
+            val fragment = ItemFragment.newInstance(2)
             parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
                 .addToBackStack("home").commit()
             true
