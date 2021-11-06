@@ -7,11 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import br.senac.mobile.R
-import br.senac.mobile.adapters.CategoryCardAdapter
 import br.senac.mobile.databinding.*
 import br.senac.mobile.models.Category
 import androidx.appcompat.app.AppCompatActivity
+import br.senac.mobile.adapters.CategoryRecyclerViewAdapter
 import br.senac.mobile.services.API
+import br.senac.mobile.utils.GridSpacingItemDecoration
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,21 +42,9 @@ class HomeFragment : Fragment() {
         getCategoryList()
     }
 
-    private fun updateUI(categoryList: List<Any>?) {
-        // Adapter
-        val categoryAdapter: CategoryCardAdapter? = activity?.let { CategoryCardAdapter(it,
-            categoryList!! as ArrayList<Category>, ::setOnClickedCategory
-        ) }
-
-        binding.homeCardListGrid.adapter = categoryAdapter
-    }
-
-    private fun setOnClickedCategory(id: Int) {
-        val catalogType = "category"
-        val fragment = StoreCatalogFragment.newInstance(catalogType, id)
-        parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
-            .addToBackStack("home").commit()
-        true
+    private fun updateUI(categoryList: List<Category>) {
+        binding.homeCardListGrid.adapter = CategoryRecyclerViewAdapter(categoryList, parentFragmentManager)
+        binding.homeCardListGrid.addItemDecoration(GridSpacingItemDecoration(2, 16, false))
     }
 
     private fun getCategoryList() {
