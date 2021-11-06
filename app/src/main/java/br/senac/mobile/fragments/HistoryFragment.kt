@@ -1,84 +1,122 @@
 package br.senac.mobile.fragments
 
 import android.os.Bundle
+import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
+import androidx.core.view.forEach
 import br.senac.mobile.R
 import br.senac.mobile.databinding.FragmentHistoryBinding
 import br.senac.mobile.databinding.HistoryCardBinding
 import br.senac.mobile.databinding.HistoryItemCardBinding
+import br.senac.mobile.models.Order
+import br.senac.mobile.services.API
+import br.senac.mobile.utils.formatDate
+import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HistoryFragment : Fragment() {
+    lateinit var binding: FragmentHistoryBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
         val mainActivity = activity as AppCompatActivity
         mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mainActivity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow)
 
-        val historyCardBinding = HistoryCardBinding.inflate(layoutInflater)
-        val historyCardBinding2 = HistoryCardBinding.inflate(layoutInflater)
-
-        historyCardBinding.historyIdText.text = "#ckdt8"
-        historyCardBinding.historyDateText.text = "21/05/2021"
-        historyCardBinding.historyNameText.text = "A forja do Guerreiro"
-        historyCardBinding.historyPriceText.text = "20 PO"
-
-        historyCardBinding2.historyIdText.text = "#dacx7"
-        historyCardBinding2.historyDateText.text = "01/07/2021"
-        historyCardBinding2.historyNameText.text = "A forja do Guerreiro"
-        historyCardBinding2.historyPriceText.text = "4 PO"
-
-        val historyItemCardBinding = HistoryItemCardBinding.inflate(layoutInflater)
-        val historyItemCardBinding2 = HistoryItemCardBinding.inflate(layoutInflater)
-        val historyItemCardBinding3 = HistoryItemCardBinding.inflate(layoutInflater)
-
-        historyCardBinding.historyLinearLayout.setOnClickListener {
-            val isVisible1 = historyItemCardBinding.historyItemLinearLayout.isVisible
-            val isVisible2 = historyItemCardBinding2.historyItemLinearLayout.isVisible
-            if (isVisible1 && isVisible2) {
-                historyItemCardBinding.historyItemLinearLayout.visibility = View.GONE
-                historyItemCardBinding2.historyItemLinearLayout.visibility = View.GONE
-            } else {
-                historyItemCardBinding.historyItemLinearLayout.visibility = View.VISIBLE
-                historyItemCardBinding2.historyItemLinearLayout.visibility = View.VISIBLE
-            }
+        binding.swipeRefresh.setOnRefreshListener {
+            getOrderList()
         }
 
-        historyCardBinding2.historyLinearLayout.setOnClickListener {
-            val isVisible3 = historyItemCardBinding3.historyItemLinearLayout.isVisible
-            if (isVisible3) {
-                historyItemCardBinding3.historyItemLinearLayout.visibility = View.GONE
-            } else {
-                historyItemCardBinding3.historyItemLinearLayout.visibility = View.VISIBLE
-            }
-        }
-
-        historyItemCardBinding.historyItemImage.setImageResource(R.drawable.sword)
-        historyItemCardBinding.historyItemNameText.text = "Espada Bastarda"
-        historyItemCardBinding.historyItemPriceText.text = "12 PO"
-
-        historyItemCardBinding2.historyItemImage.setImageResource(R.drawable.sword)
-        historyItemCardBinding2.historyItemNameText.text = "Espada Longa"
-        historyItemCardBinding2.historyItemPriceText.text = "8 PO"
-
-        historyItemCardBinding3.historyItemImage.setImageResource(R.drawable.sword)
-        historyItemCardBinding3.historyItemNameText.text = "Espada Curta"
-        historyItemCardBinding3.historyItemPriceText.text = "4 PO"
-
-        binding.historyLinearLayout.addView(historyCardBinding.root, 0)
-        binding.historyLinearLayout.addView(historyItemCardBinding.root, 1)
-        binding.historyLinearLayout.addView(historyItemCardBinding2.root, 2)
-
-        binding.historyLinearLayout.addView(historyCardBinding2.root, 0)
-        binding.historyLinearLayout.addView(historyItemCardBinding3.root, 1)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getOrderList()
+    }
+
+    private fun updateUI(orderList: List<Order>) {
+        binding.historyLinearLayout.removeAllViews()
+        orderList?.forEach { it ->
+            val historyCardBinding = HistoryCardBinding.inflate(layoutInflater)
+            val historyCardBindingId = it.id
+
+            historyCardBinding.historyIdText.text = "#${it.id.toString()}"
+            historyCardBinding.historyDateText.text = formatDate(it.created_at)
+            historyCardBinding.historyNameText.text = it.store.name
+            historyCardBinding.historyPriceText.text = it.order_items.sumOf { it.item.price }.toString()
+
+            it.order_items?.forEachIndexed { index, product ->
+                val historyItemCardBinding = HistoryItemCardBinding.inflate(layoutInflater)
+                historyItemCardBinding.root.tag = it.id
+
+                historyItemCardBinding.historyItemNameText.text = product.item.name
+                historyItemCardBinding.historyItemPriceText.text = product.item.price.toString()
+                Picasso
+                    .get()
+                    .load("${API().baseUrl}image/item/${product.item.id}")
+                    .error(R.drawable.logo)
+                    .into(historyItemCardBinding.historyItemImage)
+
+                binding.historyLinearLayout.addView(historyItemCardBinding.root, index)
+            }
+
+            historyCardBinding.historyLinearLayout.setOnClickListener {
+                binding.historyLinearLayout.forEach { itemView ->
+                    if (itemView.tag == historyCardBindingId) {
+                        if (itemView.visibility == View.VISIBLE) {
+                            itemView.visibility = View.GONE
+                        } else {
+                            itemView.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
+
+            binding.historyLinearLayout.addView(historyCardBinding.root, 0)
+        }
+    }
+
+    private fun getOrderList() {
+        val mainActivity = activity as AppCompatActivity
+
+        val callback = object: Callback<List<Order>> {
+            override fun onResponse(call: Call<List<Order>>, response: Response<List<Order>>) {
+                binding.orderProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
+
+                if (response.isSuccessful) {
+                    val orderList = response.body()
+                    orderList?.let { updateUI(orderList) }
+                } else {
+                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                        "Não é possível atualizar os dados.",
+                        Snackbar.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<Order>>, t: Throwable) {
+                binding.orderProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
+
+                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                    "Não foi possível conectar ao servidor.",
+                    Snackbar.LENGTH_LONG).show()
+                Log.e("ERROR", "Falha ao executar serviço", t)
+            }
+
+        }
+
+        API().order.getOrder().enqueue(callback)
+        binding.orderProgressBar.visibility = View.VISIBLE
     }
 }
