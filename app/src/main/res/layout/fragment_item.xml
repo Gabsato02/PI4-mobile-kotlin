@@ -16,7 +16,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/itemFragCardBackgroundImage"
                 android:layout_width="wrap_content"
                 android:layout_height="244dp"
                 android:scaleType="fitXY"
@@ -25,7 +25,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/itemFragCardView"
                 android:layout_width="0dp"
                 android:layout_height="240dp"
@@ -37,11 +37,27 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/sword" />
-            </LinearLayout>
+                    android:id="@+id/itemFragCardImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ProgressBar
+                    android:id="@+id/itemFragCardImageProgressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/primary"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/itemFragCardImageView"
+                    app:layout_constraintStart_toStartOf="@+id/itemFragCardImageView"
+                    app:layout_constraintTop_toTopOf="@+id/itemFragCardImageView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/itemFragNameText"
@@ -49,9 +65,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="24dp"
-                android:text="Espada Bastarda"
                 android:textColor="@color/black"
                 android:textSize="24sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/itemFragCardView" />
 
@@ -67,7 +83,6 @@
                 android:gravity="right|center_vertical"
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp"
-                android:text="4 PO"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +95,6 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="32dp"
-                android:text="Esta espada de lâmina larga, às vezes chamada de espada de uma mão e meia, possui um punho mais longo para que possa ser empunhada com uma mão ou usando as duas mãos para obter maior poder de corte ou perfuração."
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -104,9 +118,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Traços"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -126,9 +140,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="Características"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -140,20 +154,36 @@
         android:background="#00FFFFFF"
         android:gravity="bottom">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/itemFragmentBagButton"
-            android:layout_width="fill_parent"
-            android:layout_height="48dp"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/item_background"
-            android:drawableRight="@drawable/ic_coins_solid"
-            android:drawableTint="@color/primary"
-            android:paddingRight="24dp"
-            android:text="Colocar na sacola"
-            android:textColor="@color/primary"
-            android:textSize="20sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/itemFragmentBagButton"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/item_background"
+                android:drawableRight="@drawable/ic_coins_solid"
+                android:drawableTint="@color/primary"
+                android:paddingRight="24dp"
+                android:text="Colocar na sacola"
+                android:textColor="@color/primary"
+                android:textSize="20sp"
+                android:visibility="invisible" />
+
+            <ProgressBar
+                android:id="@+id/itemFragCardProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/primary"
+                android:progressTint="@color/primary" />
+        </LinearLayout>
 
     </RelativeLayout>
 

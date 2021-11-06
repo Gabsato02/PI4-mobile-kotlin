@@ -58,7 +58,7 @@ class CartFragment : Fragment() {
 
 
         cartCardBinding.cartCard.setOnClickListener {
-            val fragment = ItemFragment()
+            val fragment = ItemFragment.newInstance(1)
             parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
                 .addToBackStack("cart").commit()
             true
