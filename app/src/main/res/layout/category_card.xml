@@ -6,8 +6,18 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="4dp">
 
+    <ProgressBar
+        android:id="@+id/categoryCardProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/primary"
+        android:progressTint="#FFFFFF" />
+
     <ImageView
-        android:id="@+id/cardImageView"
+        android:id="@+id/categoryCardImageView"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:adjustViewBounds="true"
@@ -15,7 +25,7 @@
         android:scaleType="centerCrop" />
 
     <TextView
-        android:id="@+id/cardTextView"
+        android:id="@+id/categoryCardTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#99000000"
