@@ -34,7 +34,7 @@ class CategoryRecyclerViewAdapter(private val categoryList: List<Category>, priv
                 })
 
             binding.root.setOnClickListener {
-                val fragment = StoreCatalogFragment.newInstance("category", category.id)
+                val fragment = StoreCatalogFragment.newInstance("category", category.id, "")
                 fragmentManagger.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
                     .addToBackStack("home").commit()
                 true

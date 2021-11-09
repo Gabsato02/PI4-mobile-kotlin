@@ -9,6 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:paddingBottom="16dp"
         android:text="TextView"
         android:textColor="@color/primary"
         android:textSize="20sp"

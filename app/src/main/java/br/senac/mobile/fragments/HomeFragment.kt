@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import br.senac.mobile.R
 import br.senac.mobile.databinding.*
 import br.senac.mobile.models.Category
@@ -28,11 +29,12 @@ class HomeFragment : Fragment() {
         mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         binding.homeSpotlightCardImage.setOnClickListener {
-            val fragment = StoreCatalogFragment.newInstance("general", 0)
+            val fragment = StoreCatalogFragment.newInstance("general", 0, "")
             parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
                 .addToBackStack("home").commit()
             true
         }
+        binding.homeCardListGrid.adapter = CategoryRecyclerViewAdapter(listOf<Category>(), parentFragmentManager)
 
         return binding.root
     }
@@ -55,7 +57,9 @@ class HomeFragment : Fragment() {
                 binding.homeProgressBar.visibility = View.GONE
 
                 if (response.isSuccessful) {
-                    val categoryList = response.body()
+                    val categoryList = response.body()?.filter {
+                        it.deleted_at.isNullOrEmpty() && it.items.isNotEmpty()
+                    }
                     categoryList?.let { updateUI(categoryList) }
                 } else {
                     Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
@@ -74,7 +78,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        API().category.getCategory().enqueue(callback)
+        API().category.getCategories(true).enqueue(callback)
         binding.homeProgressBar.visibility = View.VISIBLE
     }
 }

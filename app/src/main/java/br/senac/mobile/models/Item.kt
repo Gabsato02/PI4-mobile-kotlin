@@ -11,4 +11,5 @@ data class Item(
     val category: Category,
     val traits: List<Trait>,
     val characteristics: List<Characteristic>,
+    val deleted_at: String,
 )

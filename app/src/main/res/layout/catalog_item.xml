@@ -3,66 +3,89 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="8dp">
 
-    <LinearLayout
-        android:id="@+id/catalogItemNamePriceLinearLayout"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="@drawable/bottom_separator"
-        android:orientation="horizontal"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp">
-
-        <ImageView
-            android:id="@+id/catalogItemImage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            tools:srcCompat="@tools:sample/avatars" />
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="4dp">
 
         <LinearLayout
-            android:id="@+id/catalogInfoLinearLayout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:id="@+id/catalogItemNamePriceLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/bottom_separator"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp"
+            android:paddingTop="20dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="20dp">
 
-            <TextView
-                android:id="@+id/catalogNameText"
+            <ProgressBar
+                android:id="@+id/catalogItemImageProgressBar"
+                style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="TextView"
-                android:textColor="@color/tertiary"
-                android:textSize="18sp" />
+                android:layout_gravity="center"
+                android:layout_weight="0.2"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/primary" />
 
-            <TextView
-                android:id="@+id/catalogDescriptionText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="2"
-                android:scrollHorizontally="true"
-                android:text="TextView"
-                android:textColor="@color/tertiary" />
+            <ImageView
+                android:id="@+id/catalogItemImage"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="8dp"
+                android:layout_weight="0.4"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                tools:srcCompat="@tools:sample/avatars" />
 
-            <TextView
-                android:id="@+id/catalogPriceText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:id="@+id/catalogInfoLinearLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableEnd="@drawable/ic_coins_solid"
-                android:drawablePadding="12dp"
-                android:drawableTint="@color/text_golden"
-                android:gravity="center_vertical"
-                android:text="TextView"
-                android:textColor="@color/tertiary"
-                android:textSize="18sp" />
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/catalogNameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="TextView"
+                    android:textColor="@color/tertiary"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/catalogDescriptionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="2"
+                    android:scrollHorizontally="true"
+                    android:text="TextView"
+                    android:textColor="@color/tertiary" />
+
+                <TextView
+                    android:id="@+id/catalogPriceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/ic_coins_solid"
+                    android:drawablePadding="12dp"
+                    android:drawableTint="@color/text_golden"
+                    android:gravity="center_vertical"
+                    android:text="TextView"
+                    android:textColor="@color/tertiary"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
