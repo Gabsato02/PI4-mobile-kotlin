@@ -20,19 +20,22 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
 
-private const val ARG_PARAM1 = "catalogType"
-private const val ARG_PARAM2 = "catalogId"
+private const val CATALOG_TYPE_PARAM = "catalogType"
+private const val CATALOG_ID_PARAM = "catalogId"
+private const val CATALOG_QUERY_PARAM = "catalogQuery"
 
 class StoreCatalogFragment : Fragment() {
     private var catalogType: String? = null
     private var catalogId: Int = 0
+    private var catalogQuery: String? = null
     private lateinit var binding: FragmentStoreCatalogBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            catalogType = it.getString(ARG_PARAM1)
-            catalogId = it.getInt(ARG_PARAM2)
+            catalogType = it.getString(CATALOG_TYPE_PARAM)
+            catalogId = it.getInt(CATALOG_ID_PARAM)
+            catalogQuery = it.getString(CATALOG_QUERY_PARAM)
         }
     }
 
@@ -51,48 +54,56 @@ class StoreCatalogFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        getItemsListByCategory()
+        when(catalogType) {
+            "category" -> getItemsListByCategory()
+            "general" -> getAllItems()
+            else -> getItemsListBySearch()
+        }
+
     }
 
-    private fun updateUiWithCategory(category: Category) {
+    private fun updateUiWithCategories(categoriesList: List<Category>) {
         binding.catalogContentLinearLayout.removeAllViews()
 
-        val catalogTitleBinding = CatalogTitleBinding.inflate(layoutInflater)
-        val categoryTitle = if (category.items.isEmpty()) "Não há resultados para: ${category.name}" else category.name
-        catalogTitleBinding.catalogTitleText.text = categoryTitle
-        binding.catalogContentLinearLayout.addView(catalogTitleBinding.root)
+        categoriesList.forEach { category ->
+            if (category.items.isEmpty() && catalogType === "general") return@forEach
 
-        if (category.items.isNotEmpty()) {
-            category.items.forEach {
-                if (it.deleted_at.isNullOrEmpty()) {
-                    val catalogItemBinding = CatalogItemBinding.inflate(layoutInflater)
-                    catalogItemBinding.catalogNameText.text = it.name
-                    catalogItemBinding.catalogDescriptionText.text = it.description
-                    catalogItemBinding.catalogPriceText.text = "${it.price} PO"
-                    val itemId = it.id
+            val catalogTitleBinding = CatalogTitleBinding.inflate(layoutInflater)
+            val categoryTitle = if (category.items.isEmpty()) "Não há resultados para: ${category.name}" else category.name
+            catalogTitleBinding.catalogTitleText.text = categoryTitle
+            binding.catalogContentLinearLayout.addView(catalogTitleBinding.root)
 
-                    catalogItemBinding.root.setOnClickListener {
-                        val fragment = ItemFragment.newInstance(itemId)
-                        parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
-                            .addToBackStack("home").commit()
-                        true
+            if (category.items.isNotEmpty()) {
+                category.items.forEach { item ->
+                    if (item.deleted_at.isNullOrEmpty()) {
+                        val catalogItemBinding = CatalogItemBinding.inflate(layoutInflater)
+                        catalogItemBinding.catalogNameText.text = item.name
+                        catalogItemBinding.catalogDescriptionText.text = item.description
+                        catalogItemBinding.catalogPriceText.text = "${item.price} PO"
+
+                        catalogItemBinding.root.setOnClickListener {
+                            val fragment = ItemFragment.newInstance(item.id)
+                            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
+                                .addToBackStack("home").commit()
+                            true
+                        }
+
+                        Picasso
+                            .get()
+                            .load("${API().baseUrl}image/item/${item.id}")
+                            .into(catalogItemBinding.catalogItemImage, object : com.squareup.picasso.Callback {
+                                override fun onSuccess() {
+                                    catalogItemBinding.catalogItemImageProgressBar.visibility = View.GONE
+                                    catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
+                                }
+
+                                override fun onError(e: Exception?) {
+                                    catalogItemBinding.catalogItemImageProgressBar.visibility = View.GONE
+                                    catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
+                                }
+                            })
+                        binding.catalogContentLinearLayout.addView(catalogItemBinding.root)
                     }
-
-                    Picasso
-                        .get()
-                        .load("${API().baseUrl}image/item/${it.id}")
-                        .into(catalogItemBinding.catalogItemImage, object : com.squareup.picasso.Callback {
-                            override fun onSuccess() {
-                                catalogItemBinding.catalogItemImageProgressBar.visibility = View.GONE
-                                catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
-                            }
-
-                            override fun onError(e: Exception?) {
-                                catalogItemBinding.catalogItemImageProgressBar.visibility = View.GONE
-                                catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
-                            }
-                        })
-                    binding.catalogContentLinearLayout.addView(catalogItemBinding.root)
                 }
             }
         }
@@ -105,8 +116,9 @@ class StoreCatalogFragment : Fragment() {
             override fun onResponse(call: Call<Category>, response: Response<Category>) {
                 binding.catalogProgressBar.visibility = View.GONE
                 if (response.isSuccessful) {
-                    val category = response.body()
-                    category?.let { updateUiWithCategory(category) }
+                    val categoryList = mutableListOf<Category>()
+                    response.body()?.let { categoryList.add(it) }
+                    categoryList?.let { updateUiWithCategories(categoryList) }
                 } else {
                     Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
                         "Não é possível atualizar os dados.",
@@ -128,12 +140,46 @@ class StoreCatalogFragment : Fragment() {
         binding.catalogProgressBar.visibility = View.VISIBLE
     }
 
+
+    private fun getAllItems() {
+        val mainActivity = activity as AppCompatActivity
+
+        val callback = object: Callback<List<Category>> {
+            override fun onResponse(call: Call<List<Category>>, response: Response<List<Category>>) {
+                binding.catalogProgressBar.visibility = View.GONE
+                if (response.isSuccessful) {
+                    val categoriesList = response.body()
+                    categoriesList?.let { updateUiWithCategories(categoriesList) }
+                } else {
+                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                        "Não é possível atualizar os dados.",
+                        Snackbar.LENGTH_LONG).show()
+                    println(response)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
+                binding.catalogProgressBar.visibility = View.GONE
+                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                    "Não foi possível conectar ao servidor.",
+                    Snackbar.LENGTH_LONG).show()
+                Log.e("ERROR", "Falha ao executar serviço", t)
+            }
+        }
+
+        API().category.getCategories(true).enqueue(callback)
+        binding.catalogProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun getItemsListBySearch() {}
+
     companion object {
-        @JvmStatic fun newInstance(catalogType: String, catalogId: Int) =
+        @JvmStatic fun newInstance(catalogType: String, catalogId: Int, catalogQuery: String) =
             StoreCatalogFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, catalogType)
-                    putInt(ARG_PARAM2, catalogId)
+                    putString(CATALOG_TYPE_PARAM, catalogType)
+                    putInt(CATALOG_ID_PARAM, catalogId)
+                    putString(CATALOG_QUERY_PARAM, catalogQuery)
                 }
             }
     }

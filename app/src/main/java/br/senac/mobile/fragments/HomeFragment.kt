@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
         mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         binding.homeSpotlightCardImage.setOnClickListener {
-            val fragment = StoreCatalogFragment.newInstance("general", 0)
+            val fragment = StoreCatalogFragment.newInstance("general", 0, "")
             parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
                 .addToBackStack("home").commit()
             true
@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        API().category.getCategory().enqueue(callback)
+        API().category.getCategories(false).enqueue(callback)
         binding.homeProgressBar.visibility = View.VISIBLE
     }
 }
