@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
 
                 if (response.isSuccessful) {
                     val categoryList = response.body()?.filter {
-                        it.deleted_at.isNullOrEmpty()
+                        it.deleted_at.isNullOrEmpty() && it.items.isNotEmpty()
                     }
                     categoryList?.let { updateUI(categoryList) }
                 } else {
@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        API().category.getCategories(false).enqueue(callback)
+        API().category.getCategories(true).enqueue(callback)
         binding.homeProgressBar.visibility = View.VISIBLE
     }
 }
