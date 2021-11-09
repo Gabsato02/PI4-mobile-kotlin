@@ -62,13 +62,15 @@
                     android:text="Preço"
                     android:textSize="18sp" />
 
-                <Spinner
-                    android:id="@+id/quantitySpinner"
-                    android:layout_width="match_parent"
+                <EditText
+                    android:id="@+id/itemQuantityInput"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:minHeight="48dp"
-                    android:textAlignment="viewEnd" />
+                    android:layout_gravity="right"
+                    android:ems="10"
+                    android:gravity="right"
+                    android:hint="Quantidade"
+                    android:inputType="number" />
 
             </LinearLayout>
         </LinearLayout>

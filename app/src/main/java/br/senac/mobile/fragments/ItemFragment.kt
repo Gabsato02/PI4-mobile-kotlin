@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import br.senac.mobile.R
+import br.senac.mobile.database.Database
 import br.senac.mobile.databinding.FragmentItemBinding
 import br.senac.mobile.databinding.TraitsCharacCardBinding
+import br.senac.mobile.models.Cart
 import br.senac.mobile.models.Item
 import br.senac.mobile.services.API
 import com.google.android.material.snackbar.Snackbar
@@ -18,6 +20,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
+import kotlin.concurrent.thread
 
 private const val ARG_PARAM1 = "itemId"
 
@@ -51,6 +54,8 @@ class ItemFragment: Fragment() {
     }
 
     private fun updateUI(item: Item) {
+        val mainActivity = activity as AppCompatActivity
+        val db = Database().databaseBuilder(mainActivity.applicationContext)
         binding.itemFragNameText.text = item.name
         binding.itemFragPriceText.text = "${item.price} PO"
         binding.itemFragDescriptionText.text = item.description
@@ -86,6 +91,16 @@ class ItemFragment: Fragment() {
             })
 
         binding.itemFragmentBagButton.setOnClickListener {
+            val cart = Cart(
+                name = binding.itemFragNameText.text.toString(),
+                price = binding.itemFragPriceText.text.toString(),
+                quantity = "1"
+            )
+
+            thread {
+                db.cartDao().insert(cart)
+            }
+
             val fragment = CartFragment()
             parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
                 .addToBackStack("home").commit()
