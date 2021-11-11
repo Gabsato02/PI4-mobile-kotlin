@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.Exception
 
 class HistoryFragment : Fragment() {
     lateinit var binding: FragmentHistoryBinding
@@ -65,7 +66,15 @@ class HistoryFragment : Fragment() {
                     .get()
                     .load("${API().baseUrl}image/item/${product.item.id}")
                     .error(R.drawable.logo)
-                    .into(historyItemCardBinding.historyItemImage)
+                    .into(historyItemCardBinding.historyItemImage, object : com.squareup.picasso.Callback {
+                        override fun onSuccess() {
+                            historyItemCardBinding.historyProgressBar.visibility = View.GONE
+                        }
+
+                        override fun onError(e: Exception?) {
+                            historyItemCardBinding.historyProgressBar.visibility = View.GONE
+                        }
+                    })
 
                 binding.historyLinearLayout.addView(historyItemCardBinding.root, index)
             }

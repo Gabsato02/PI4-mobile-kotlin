@@ -100,8 +100,9 @@ class ItemFragment: Fragment() {
 
         binding.itemFragmentBagButton.setOnClickListener {
             val cart = Cart(
-                name = binding.itemFragNameText.text.toString(),
-                price = binding.itemFragPriceText.text.toString(),
+                itemId = item.id,
+                name = item.name,
+                price = item.price.toString(),
                 quantity = "1"
             )
 
