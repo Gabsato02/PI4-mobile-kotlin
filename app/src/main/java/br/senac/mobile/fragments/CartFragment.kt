@@ -7,8 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import br.senac.mobile.R
 import br.senac.mobile.database.Database
 import br.senac.mobile.databinding.FragmentCartBinding
@@ -31,6 +34,10 @@ class CartFragment : Fragment() {
         val mainActivity = activity as AppCompatActivity
         mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mainActivity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow)
+
+        binding.swipeRefresh.setOnRefreshListener {
+            getCartItems()
+        }
 
 //        val cartCardBinding = ShoppingCartCardBinding.inflate(layoutInflater)
 //        val cartCardBinding2 = ShoppingCartCardBinding.inflate(layoutInflater)
@@ -90,36 +97,61 @@ class CartFragment : Fragment() {
     }
 
     private fun getCartItems() {
+        binding.cartProgressBar.visibility = View.VISIBLE
         binding.cartLinearLayout.removeAllViews()
         val mainActivity = activity as AppCompatActivity
         val db = Database().databaseBuilder(mainActivity.applicationContext)
 
         thread {
             val cartItems = db.cartDao().list()
+            var totalPrice = 0
 
             mainActivity.runOnUiThread {
                 cartItems.forEach {
                     val cartCardBinding = ShoppingCartCardBinding.inflate(layoutInflater)
+                    totalPrice += it.price.toInt() * it.quantity.toInt()
 
                     cartCardBinding.itemImage.setImageResource(R.drawable.sword)
                     cartCardBinding.itemNameText.text = it.name
                     cartCardBinding.itemPriceText.text = it.price
                     cartCardBinding.itemQuantityInput.setText(it.quantity)
-//                    Picasso
-//                        .get()
-//                        .load("${API().baseUrl}image/item/${it.id}")
-//                        .into(cartCardBinding.itemImage, object : com.squareup.picasso.Callback {
-//                            override fun onSuccess() {
-//                                binding.cartImageProgressBar.visibility = View.GONE
-//                            }
-//
-//                            override fun onError(e: Exception?) {
-//                                binding.cartImageProgressBar.visibility = View.GONE
-//                            }
-//                        })
+                    Picasso
+                        .get()
+                        .load("${API().baseUrl}image/item/${it.itemId}")
+                        .error(R.drawable.no_image)
+                        .into(cartCardBinding.itemImage, object : com.squareup.picasso.Callback {
+                            override fun onSuccess() {
+                                cartCardBinding.cartImageProgressBar.visibility = View.GONE
+                            }
+
+                            override fun onError(e: Exception?) {
+                                cartCardBinding.cartImageProgressBar.visibility = View.GONE
+                            }
+                        })
+
+                    cartCardBinding.itemDeleteText.setOnClickListener { _ ->
+                        thread { it.id?.let { itemId -> db.cartDao().delete(itemId) } }
+                        getCartItems()
+                    }
+
+                    cartCardBinding.itemQuantityInput.doOnTextChanged { text, start, before, count ->
+                        // TODO Atualizar de forma reativa
+                        if (!text.isNullOrEmpty()) {
+                            val quantity = text.toString()
+                            thread { it.id?.let { itemId ->
+                                db.cartDao().update(quantity.toInt(), itemId)
+                            } }
+                            getCartItems()
+                        }
+                    }
 
                     binding.cartLinearLayout.addView(cartCardBinding.root, 0)
+                    binding.cartProgressBar.visibility = View.GONE
+                    binding.swipeRefresh.isRefreshing = false
                 }
+                binding.cartProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
+                binding.priceText.text = "Total: ${totalPrice.toString()} PO"
             }
         }
     }

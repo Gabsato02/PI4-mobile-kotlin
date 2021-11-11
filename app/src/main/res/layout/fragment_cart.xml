@@ -1,68 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:tag="cart"
-    tools:context=".fragments.CartFragment">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:tag="cart"
+        tools:context=".fragments.CartFragment">
 
-        <ScrollView
-            android:id="@+id/cartScrollView"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="68dp"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/cartLinearLayout"
+            <ScrollView
+                android:id="@+id/cartScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical" />
-        </ScrollView>
+                android:layout_marginBottom="68dp"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="68dp"
-            android:background="@drawable/bottom_red_texture"
-            android:foregroundGravity="center"
-            android:gravity="center"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+                <LinearLayout
+                    android:id="@+id/cartLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" />
+            </ScrollView>
 
-            <TextView
-                android:id="@+id/priceText"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="68dp"
+                android:background="@drawable/bottom_red_texture"
+                android:foregroundGravity="center"
                 android:gravity="center"
-                android:text="Total"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_margin="12dp"
-                android:layout_weight="1"
-                android:background="@drawable/paper_texture"
-                android:drawableRight="@drawable/ic_coins_solid"
-                android:drawableTint="@color/primary"
-                android:paddingRight="28dp"
-                android:text="FINALIZAR"
-                android:textColor="@color/primary"
-                android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/priceText"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    tools:text="Total" />
 
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/paper_texture"
+                    android:drawableRight="@drawable/ic_coins_solid"
+                    android:drawableTint="@color/primary"
+                    android:paddingRight="28dp"
+                    android:text="FINALIZAR"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp" />
 
-</FrameLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom">
+
+                <ProgressBar
+                    android:id="@+id/cartProgressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="68dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/primary" />
+            </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
