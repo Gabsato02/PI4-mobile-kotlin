@@ -29,6 +29,8 @@ class StoreCatalogFragment : Fragment() {
     private var catalogId: Int = 0
     private var catalogQuery: String? = null
     private lateinit var binding: FragmentStoreCatalogBinding
+    private var callCategories: Call<Category>? = null
+    private var callCategoriesItems: Call<List<Category>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,49 +65,51 @@ class StoreCatalogFragment : Fragment() {
     }
 
     private fun updateUiWithCategories(categoriesList: List<Category>) {
-        binding.catalogContentLinearLayout.removeAllViews()
+        if (layoutInflater != null) {
+            binding.catalogContentLinearLayout.removeAllViews()
 
-        categoriesList.forEach { category ->
-            if (category.items.isEmpty()) return@forEach
+            categoriesList.forEach { category ->
+                if (category.items.isEmpty()) return@forEach
 
-            val catalogTitleBinding = CatalogTitleBinding.inflate(layoutInflater)
-            catalogTitleBinding.catalogTitleText.text = category.name
-            binding.catalogContentLinearLayout.addView(catalogTitleBinding.root)
+                val catalogTitleBinding = CatalogTitleBinding.inflate(layoutInflater)
+                catalogTitleBinding.catalogTitleText.text = category.name
+                binding.catalogContentLinearLayout.addView(catalogTitleBinding.root)
 
-            category.items.forEach { item ->
-                if (item.deleted_at.isNullOrEmpty()) {
-                    val catalogItemBinding = CatalogItemBinding.inflate(layoutInflater)
-                    catalogItemBinding.catalogNameText.text = item.name
-                    catalogItemBinding.catalogDescriptionText.text = item.description
-                    catalogItemBinding.catalogPriceText.text = "${item.price} PO"
+                category.items.forEach { item ->
+                    if (item.deleted_at.isNullOrEmpty()) {
+                        val catalogItemBinding = CatalogItemBinding.inflate(layoutInflater)
+                        catalogItemBinding.catalogNameText.text = item.name
+                        catalogItemBinding.catalogDescriptionText.text = item.description
+                        catalogItemBinding.catalogPriceText.text = "${item.price} PO"
 
-                    catalogItemBinding.root.setOnClickListener {
-                        val fragment = ItemFragment.newInstance(item.id)
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.mainFragmentContainer, fragment)
-                            .addToBackStack("home").commit()
-                        true
+                        catalogItemBinding.root.setOnClickListener {
+                            val fragment = ItemFragment.newInstance(item.id)
+                            parentFragmentManager.beginTransaction()
+                                .replace(R.id.mainFragmentContainer, fragment)
+                                .addToBackStack("home").commit()
+                            true
+                        }
+
+                        Picasso
+                            .get()
+                            .load("${API().baseUrl}image/item/${item.id}")
+                            .into(
+                                catalogItemBinding.catalogItemImage,
+                                object : com.squareup.picasso.Callback {
+                                    override fun onSuccess() {
+                                        catalogItemBinding.catalogItemImageProgressBar.visibility =
+                                            View.GONE
+                                        catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
+                                    }
+
+                                    override fun onError(e: Exception?) {
+                                        catalogItemBinding.catalogItemImageProgressBar.visibility =
+                                            View.GONE
+                                        catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
+                                    }
+                                })
+                        binding.catalogContentLinearLayout.addView(catalogItemBinding.root)
                     }
-
-                    Picasso
-                        .get()
-                        .load("${API().baseUrl}image/item/${item.id}")
-                        .into(
-                            catalogItemBinding.catalogItemImage,
-                            object : com.squareup.picasso.Callback {
-                                override fun onSuccess() {
-                                    catalogItemBinding.catalogItemImageProgressBar.visibility =
-                                        View.GONE
-                                    catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
-                                }
-
-                                override fun onError(e: Exception?) {
-                                    catalogItemBinding.catalogItemImageProgressBar.visibility =
-                                        View.GONE
-                                    catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
-                                }
-                            })
-                    binding.catalogContentLinearLayout.addView(catalogItemBinding.root)
                 }
             }
         }
@@ -130,15 +134,18 @@ class StoreCatalogFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<Category>, t: Throwable) {
-                binding.catalogProgressBar.visibility = View.GONE
-                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                    "Não foi possível conectar ao servidor.",
-                    Snackbar.LENGTH_LONG).show()
-                Log.e("ERROR", "Falha ao executar serviço", t)
+                if (!call.isCanceled) {
+                    binding.catalogProgressBar.visibility = View.GONE
+                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                        "Não foi possível conectar ao servidor.",
+                        Snackbar.LENGTH_LONG).show()
+                    Log.e("ERROR", "Falha ao executar serviço", t)
+                }
             }
         }
 
-        API().category.getCategoryWithItems(catalogId).enqueue(callback)
+        callCategories = API().category.getCategoryWithItems(catalogId)
+        callCategories?.enqueue(callback)
         binding.catalogProgressBar.visibility = View.VISIBLE
     }
 
@@ -161,16 +168,25 @@ class StoreCatalogFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
-                binding.catalogProgressBar.visibility = View.GONE
-                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                    "Não foi possível conectar ao servidor.",
-                    Snackbar.LENGTH_LONG).show()
-                Log.e("ERROR", "Falha ao executar serviço", t)
+                if (!call.isCanceled) {
+                    binding.catalogProgressBar.visibility = View.GONE
+                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                        "Não foi possível conectar ao servidor.",
+                        Snackbar.LENGTH_LONG).show()
+                    Log.e("ERROR", "Falha ao executar serviço", t)
+                }
             }
         }
 
-        API().category.getCategories(true).enqueue(callback)
+        callCategoriesItems = API().category.getCategories(true)
+        callCategoriesItems?.enqueue(callback)
         binding.catalogProgressBar.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        callCategoriesItems?.cancel()
+        callCategories?.cancel()
     }
 
     private fun getItemsListBySearch() {}

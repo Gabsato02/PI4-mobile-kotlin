@@ -44,7 +44,7 @@ class CategoryRecyclerViewAdapter(private val categoryList: List<Category>, priv
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryCardViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val cardBinding = CategoryCardBinding.inflate(layoutInflater)
+        val cardBinding = CategoryCardBinding.inflate(layoutInflater, parent, false)
         return CategoryCardViewHolder(cardBinding, fragmentManagger)
     }
 

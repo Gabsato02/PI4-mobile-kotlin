@@ -21,6 +21,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
 import kotlin.concurrent.thread
+import android.graphics.Bitmap
+
+
+
 
 private const val ARG_PARAM1 = "itemId"
 
@@ -81,13 +85,13 @@ class ItemFragment: Fragment() {
             .get()
             .load("${API().baseUrl}image/item/${item.id}")
             .into(binding.itemFragCardImageView, object : com.squareup.picasso.Callback {
-                override fun onSuccess() {
-                    binding.itemFragCardImageProgressBar.visibility = View.GONE
-                }
+                    override fun onSuccess() {
+                        binding.itemFragCardImageProgressBar.visibility = View.GONE
+                    }
 
-                override fun onError(e: Exception?) {
-                    binding.itemFragCardImageProgressBar.visibility = View.GONE
-                }
+                    override fun onError(e: Exception?) {
+                        binding.itemFragCardImageProgressBar.visibility = View.GONE
+                    }
             })
 
         binding.itemFragmentBagButton.setOnClickListener {

@@ -1,6 +1,7 @@
 package br.senac.mobile.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,10 @@ import br.senac.mobile.R
 import br.senac.mobile.database.Database
 import br.senac.mobile.databinding.FragmentCartBinding
 import br.senac.mobile.databinding.ShoppingCartCardBinding
+import br.senac.mobile.services.API
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
+import java.lang.Exception
 import kotlin.concurrent.thread
 
 class CartFragment : Fragment() {
@@ -101,6 +105,18 @@ class CartFragment : Fragment() {
                     cartCardBinding.itemNameText.text = it.name
                     cartCardBinding.itemPriceText.text = it.price
                     cartCardBinding.itemQuantityInput.setText(it.quantity)
+//                    Picasso
+//                        .get()
+//                        .load("${API().baseUrl}image/item/${it.id}")
+//                        .into(cartCardBinding.itemImage, object : com.squareup.picasso.Callback {
+//                            override fun onSuccess() {
+//                                binding.cartImageProgressBar.visibility = View.GONE
+//                            }
+//
+//                            override fun onError(e: Exception?) {
+//                                binding.cartImageProgressBar.visibility = View.GONE
+//                            }
+//                        })
 
                     binding.cartLinearLayout.addView(cartCardBinding.root, 0)
                 }
