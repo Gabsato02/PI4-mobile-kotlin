@@ -12,6 +12,7 @@ import br.senac.mobile.databinding.CatalogItemBinding
 import br.senac.mobile.databinding.CatalogTitleBinding
 import br.senac.mobile.databinding.FragmentStoreCatalogBinding
 import br.senac.mobile.models.Category
+import br.senac.mobile.models.Item
 import br.senac.mobile.services.API
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -31,6 +32,7 @@ class StoreCatalogFragment : Fragment() {
     private lateinit var binding: FragmentStoreCatalogBinding
     private var callCategories: Call<Category>? = null
     private var callCategoriesItems: Call<List<Category>>? = null
+    private var callItemsBySearch: Call<List<Item>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,42 +79,58 @@ class StoreCatalogFragment : Fragment() {
 
                 category.items.forEach { item ->
                     if (item.deleted_at.isNullOrEmpty()) {
-                        val catalogItemBinding = CatalogItemBinding.inflate(layoutInflater)
-                        catalogItemBinding.catalogNameText.text = item.name
-                        catalogItemBinding.catalogDescriptionText.text = item.description
-                        catalogItemBinding.catalogPriceText.text = "${item.price} PO"
-
-                        catalogItemBinding.root.setOnClickListener {
-                            val fragment = ItemFragment.newInstance(item.id)
-                            parentFragmentManager.beginTransaction()
-                                .replace(R.id.mainFragmentContainer, fragment)
-                                .addToBackStack("home").commit()
-                            true
-                        }
-
-                        Picasso
-                            .get()
-                            .load("${API().baseUrl}image/item/${item.id}")
-                            .into(
-                                catalogItemBinding.catalogItemImage,
-                                object : com.squareup.picasso.Callback {
-                                    override fun onSuccess() {
-                                        catalogItemBinding.catalogItemImageProgressBar.visibility =
-                                            View.GONE
-                                        catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
-                                    }
-
-                                    override fun onError(e: Exception?) {
-                                        catalogItemBinding.catalogItemImageProgressBar.visibility =
-                                            View.GONE
-                                        catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
-                                    }
-                                })
-                        binding.catalogContentLinearLayout.addView(catalogItemBinding.root)
+                        updateItemsList(item)
                     }
                 }
             }
         }
+    }
+
+    private fun updateUiWithSearch(itemsList: List<Item>) {
+        if (layoutInflater != null) {
+            binding.catalogContentLinearLayout.removeAllViews()
+        }
+
+        val catalogTitleBinding = CatalogTitleBinding.inflate(layoutInflater)
+        catalogTitleBinding.catalogTitleText.text = "${itemsList.size} resultados para: $catalogQuery"
+        binding.catalogContentLinearLayout.addView(catalogTitleBinding.root)
+
+        itemsList.forEach { item -> updateItemsList(item) }
+    }
+
+    private fun updateItemsList(item: Item) {
+        val catalogItemBinding = CatalogItemBinding.inflate(layoutInflater)
+        catalogItemBinding.catalogNameText.text = item.name
+        catalogItemBinding.catalogDescriptionText.text = item.description
+        catalogItemBinding.catalogPriceText.text = "${item.price} PO"
+
+        catalogItemBinding.root.setOnClickListener {
+            val fragment = ItemFragment.newInstance(item.id)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.mainFragmentContainer, fragment)
+                .addToBackStack("home").commit()
+            true
+        }
+
+        Picasso
+            .get()
+            .load("${API().baseUrl}image/item/${item.id}")
+            .into(
+                catalogItemBinding.catalogItemImage,
+                object : com.squareup.picasso.Callback {
+                    override fun onSuccess() {
+                        catalogItemBinding.catalogItemImageProgressBar.visibility =
+                            View.GONE
+                        catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
+                    }
+
+                    override fun onError(e: Exception?) {
+                        catalogItemBinding.catalogItemImageProgressBar.visibility =
+                            View.GONE
+                        catalogItemBinding.catalogItemImage.visibility = View.VISIBLE
+                    }
+                })
+        binding.catalogContentLinearLayout.addView(catalogItemBinding.root)
     }
 
     private fun getItemsListByCategory() {
@@ -129,7 +147,6 @@ class StoreCatalogFragment : Fragment() {
                     Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
                         "Não é possível atualizar os dados.",
                         Snackbar.LENGTH_LONG).show()
-                    println(response)
                 }
             }
 
@@ -163,7 +180,6 @@ class StoreCatalogFragment : Fragment() {
                     Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
                         "Não é possível atualizar os dados.",
                         Snackbar.LENGTH_LONG).show()
-                    println(response)
                 }
             }
 
@@ -183,13 +199,45 @@ class StoreCatalogFragment : Fragment() {
         binding.catalogProgressBar.visibility = View.VISIBLE
     }
 
+
+    private fun getItemsListBySearch() {
+        val mainActivity = activity as AppCompatActivity
+
+        val callback = object: Callback<List<Item>> {
+            override fun onResponse(call: Call<List<Item>>, response: Response<List<Item>>) {
+                binding.catalogProgressBar.visibility = View.GONE
+                if (response.isSuccessful) {
+                    val itemsList = response.body()
+                    itemsList?.let { updateUiWithSearch(itemsList) }
+                } else {
+                    val catalogTitleBinding = CatalogTitleBinding.inflate(layoutInflater)
+                    catalogTitleBinding.catalogTitleText.text = "Não foram encontrados resultados para: $catalogQuery"
+                    binding.catalogContentLinearLayout.addView(catalogTitleBinding.root)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Item>>, t: Throwable) {
+                if (!call.isCanceled) {
+                    binding.catalogProgressBar.visibility = View.GONE
+                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                        "Não foi possível conectar ao servidor.",
+                        Snackbar.LENGTH_LONG).show()
+                    Log.e("ERROR", "Falha ao executar serviço", t)
+                }
+            }
+        }
+
+        callItemsBySearch = catalogQuery?.let { API().item.getItems(it) }
+        callItemsBySearch?.enqueue(callback)
+        binding.catalogProgressBar.visibility = View.VISIBLE
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         callCategoriesItems?.cancel()
         callCategories?.cancel()
+        callItemsBySearch?.cancel()
     }
-
-    private fun getItemsListBySearch() {}
 
     companion object {
         @JvmStatic fun newInstance(catalogType: String, catalogId: Int, catalogQuery: String) =

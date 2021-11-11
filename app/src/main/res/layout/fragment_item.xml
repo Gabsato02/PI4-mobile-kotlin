@@ -69,7 +69,8 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemFragCardView" />
+                app:layout_constraintTop_toBottomOf="@+id/itemFragCardView"
+                tools:text="Nome do Item" />
 
             <TextView
                 android:id="@+id/itemFragPriceText"
@@ -86,7 +87,8 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemFragCardView" />
+                app:layout_constraintTop_toBottomOf="@+id/itemFragCardView"
+                tools:text="10 PO" />
 
             <TextView
                 android:id="@+id/itemFragDescriptionText"
@@ -99,7 +101,8 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemFragNameText" />
+                app:layout_constraintTop_toBottomOf="@+id/itemFragNameText"
+                tools:text="Descrição do item." />
 
             <LinearLayout
                 android:id="@+id/itemFragTraitLinearLayout"
@@ -120,7 +123,8 @@
                     android:layout_marginBottom="8dp"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="Traços" />
             </LinearLayout>
 
             <LinearLayout
@@ -142,7 +146,8 @@
                     android:layout_marginBottom="8dp"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="Características" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

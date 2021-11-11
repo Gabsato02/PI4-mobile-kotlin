@@ -9,10 +9,9 @@ import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import br.senac.mobile.R
 import br.senac.mobile.databinding.ActivityMainBinding
-import br.senac.mobile.fragments.CartFragment
-import br.senac.mobile.fragments.HistoryFragment
-import br.senac.mobile.fragments.HomeFragment
-import br.senac.mobile.fragments.ProfileFragment
+import android.view.MenuItem
+import br.senac.mobile.fragments.*
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -55,6 +54,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.options_menu, menu)
+
+        val myActionMenuItem: MenuItem = menu.findItem(R.id.search)
+        val searchView = myActionMenuItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                val fragment = StoreCatalogFragment.newInstance("search", 0, query)
+                supportFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
+                    .addToBackStack("home").commit()
+                true
+                return false
+            }
+
+            override fun onQueryTextChange(s: String): Boolean {
+                return false
+            }
+        })
+
         return true
     }
 

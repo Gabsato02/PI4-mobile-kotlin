@@ -63,22 +63,26 @@ class ItemFragment: Fragment() {
         binding.itemFragNameText.text = item.name
         binding.itemFragPriceText.text = "${item.price} PO"
         binding.itemFragDescriptionText.text = item.description
-        binding.itemFragTraitLabel.text = "Traços"
-        binding.itemFragCharacteristicLabel.text = "Características"
         binding.itemFragmentBagButton.visibility = View.VISIBLE
 
-        item.traits.forEach {
-            val traitsCard  = TraitsCharacCardBinding.inflate(layoutInflater)
-            traitsCard.traitsCharacCardNameText.text = it.name
-            traitsCard.traitsCharacCardDescriptionText.text = it.description
-            binding.itemFragTraitLinearLayout.addView(traitsCard.root)
+        if (item.traits.isNotEmpty()) {
+            binding.itemFragTraitLabel.text = "Traços"
+            item.traits.forEach {
+                val traitsCard  = TraitsCharacCardBinding.inflate(layoutInflater)
+                traitsCard.traitsCharacCardNameText.text = it.name
+                traitsCard.traitsCharacCardDescriptionText.text = it.description
+                binding.itemFragTraitLinearLayout.addView(traitsCard.root)
+            }
         }
 
-        item.characteristics.forEach {
-            val characteristicCard = TraitsCharacCardBinding.inflate(layoutInflater)
-            characteristicCard.traitsCharacCardNameText.text = "${it.name} - ${it.characteristics_value}"
-            characteristicCard.traitsCharacCardDescriptionText.text = it.description
-            binding.itemFragCharacteristicLinearLayout.addView(characteristicCard.root)
+        if (item.characteristics.isNotEmpty()) {
+            binding.itemFragCharacteristicLabel.text = "Características"
+            item.characteristics.forEach {
+                val characteristicCard = TraitsCharacCardBinding.inflate(layoutInflater)
+                characteristicCard.traitsCharacCardNameText.text = "${it.name} - ${it.characteristics_value}"
+                characteristicCard.traitsCharacCardDescriptionText.text = it.description
+                binding.itemFragCharacteristicLinearLayout.addView(characteristicCard.root)
+            }
         }
 
         Picasso
