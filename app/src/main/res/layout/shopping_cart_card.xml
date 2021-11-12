@@ -87,6 +87,9 @@
                     android:ems="10"
                     android:gravity="right"
                     android:hint="Quantidade"
+                    android:imeOptions="actionGo"
+                    android:imeActionId="1"
+                    android:imeActionLabel="OK"
                     android:inputType="number" />
 
             </LinearLayout>

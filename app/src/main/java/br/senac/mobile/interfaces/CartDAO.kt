@@ -13,8 +13,8 @@ interface CartDAO {
     @Query("SELECT * FROM cart")
     fun list(): List<Cart>
 
-    @Query("DELETE FROM cart WHERE id = :id")
-    fun delete(id: Int)
+    @Query("DELETE FROM cart WHERE itemId = :itemId")
+    fun delete(itemId: Int)
 
     @Query("UPDATE cart SET quantity = :quantity WHERE id = :id")
     fun update(quantity: Int, id: Int)

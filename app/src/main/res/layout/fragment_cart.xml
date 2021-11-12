@@ -55,7 +55,7 @@
                     tools:text="Total" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/button"
+                    android:id="@+id/finishButton"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_margin="12dp"
