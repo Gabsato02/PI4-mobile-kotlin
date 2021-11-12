@@ -11,7 +11,8 @@ import br.senac.mobile.R
 import br.senac.mobile.databinding.FragmentProfileBinding
 import br.senac.mobile.models.User
 import br.senac.mobile.services.API
-import com.google.android.material.snackbar.Snackbar
+import br.senac.mobile.utils.getResponseMessage
+import br.senac.mobile.utils.setSnackbar
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,6 +21,7 @@ import java.lang.Exception
 
 class ProfileFragment : Fragment() {
     lateinit var binding: FragmentProfileBinding
+    lateinit var userData: User
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +33,21 @@ class ProfileFragment : Fragment() {
         mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mainActivity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow)
 
+        binding.profilePasswordCheckbox.setOnCheckedChangeListener { compoundButton, bool ->
+            if (bool) {
+                binding.passwordLinearLayout.visibility = View.VISIBLE
+            } else {
+                binding.passwordLinearLayout.visibility = View.GONE
+                binding.profileNewPasswordTextInput.setText("")
+                binding.profilePasswordTextInput.setText("")
+                binding.profileConfirmPasswordTextInput.setText("")
+            }
+        }
+
+        binding.profileButton.setOnClickListener {
+            prepareUserData(mainActivity)
+        }
+
         return binding.root
     }
 
@@ -40,8 +57,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateUI(userData: User) {
-        binding.profileNameText.text = userData.name
-        binding.profileEmailText.text = userData.email
+        binding.profileNameTextInput.setText(userData.name)
+        binding.profileEmailTextInput.setText(userData.email)
 
         Picasso
             .get()
@@ -66,21 +83,16 @@ class ProfileFragment : Fragment() {
                 binding.profileProgressBar.visibility = View.GONE
 
                 if (response.isSuccessful) {
-                    val userData = response.body()
+                    userData = response.body()!!
                     userData?.let { updateUI(userData) }
                 } else {
-                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                        "Não é possível atualizar os dados.",
-                        Snackbar.LENGTH_LONG).show()
+                    setSnackbar(mainActivity, "Não é possível atualizar os dados.")
                 }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
                 binding.profileProgressBar.visibility = View.GONE
-
-                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                    "Não foi possível conectar ao servidor.",
-                    Snackbar.LENGTH_LONG).show()
+                setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                 Log.e("ERROR", "Falha ao executar serviço", t)
             }
 
@@ -88,5 +100,76 @@ class ProfileFragment : Fragment() {
 
         API().user.getUser().enqueue(callback)
         binding.profileProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun updateUser(user: User) {
+        val mainActivity = activity as AppCompatActivity
+
+        val callback = object: Callback<User> {
+            override fun onResponse(call: Call<User>, response: Response<User>) {
+                binding.profileProgressBar.visibility = View.GONE
+                if (response.isSuccessful) {
+                    setSnackbar(mainActivity, "Atualizado com sucesso!")
+                    getUserData()
+                } else {
+                    setSnackbar(mainActivity, getResponseMessage(response.code()))
+                }
+            }
+            override fun onFailure(call: Call<User>, t: Throwable) {
+                binding.profileProgressBar.visibility = View.GONE
+                setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
+                Log.e("ERROR", "Falha ao executar serviço", t)
+            }
+        }
+
+        API().user.updateUser(user.id, user).enqueue(callback)
+        binding.profileProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun prepareUserData(mainActivity: AppCompatActivity) {
+        var hasError = false
+        val passwordText = binding.profilePasswordTextInput.getText().toString()
+        val newPasswordText = binding.profileNewPasswordTextInput.getText().toString()
+        val confirmPasswordText = binding.profileConfirmPasswordTextInput.getText().toString()
+        val emailText = binding.profileEmailTextInput.getText().toString()
+        val nameText = binding.profileNameTextInput.getText().toString()
+
+        if (binding.profilePasswordCheckbox.isChecked) {
+            if (passwordText.isNullOrEmpty() || passwordText.length < 8) {
+                setSnackbar(mainActivity, "Senha atual inválida.")
+                hasError = true
+            }
+            if (newPasswordText.isNullOrEmpty() || newPasswordText.length < 8) {
+                setSnackbar(mainActivity, "A nova senha deve conter no mínimo 8 caracteres.")
+                hasError = true
+            }
+            if (confirmPasswordText != newPasswordText) {
+                setSnackbar(mainActivity, "As senhas não conferem.")
+                hasError = true
+            }
+        }
+
+        if (emailText.isNullOrEmpty() || !emailText.contains("@") || !emailText.contains(".com")) {
+            setSnackbar(mainActivity, "Por favor, digite um e-mail válido.")
+            hasError = true
+        }
+
+        if (nameText.isNullOrEmpty()) {
+            setSnackbar(mainActivity, "Por favor, digite um nome válido.")
+            hasError = true
+        }
+
+        if (!hasError) {
+            var user: User = User(
+                id = userData.id,
+                name = if (nameText.isNotBlank()) nameText else userData.name,
+                email = if (emailText.isNotBlank()) emailText else userData.email,
+                password = if (passwordText.isNotBlank()) passwordText else userData.password,
+                newPassword = if (newPasswordText.isNotBlank()) newPasswordText else null,
+                role = userData.role,
+                image = userData.image
+            )
+            updateUser(user)
+        }
     }
 }

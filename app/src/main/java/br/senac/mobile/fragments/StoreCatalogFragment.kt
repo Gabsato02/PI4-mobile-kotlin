@@ -14,6 +14,8 @@ import br.senac.mobile.databinding.FragmentStoreCatalogBinding
 import br.senac.mobile.models.Category
 import br.senac.mobile.models.Item
 import br.senac.mobile.services.API
+import br.senac.mobile.utils.getResponseMessage
+import br.senac.mobile.utils.setSnackbar
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -144,18 +146,14 @@ class StoreCatalogFragment : Fragment() {
                     response.body()?.let { categoryList.add(it) }
                     categoryList?.let { updateUiWithCategories(categoryList) }
                 } else {
-                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                        "Não é possível atualizar os dados.",
-                        Snackbar.LENGTH_LONG).show()
+                    setSnackbar(mainActivity, getResponseMessage(response.code()))
                 }
             }
 
             override fun onFailure(call: Call<Category>, t: Throwable) {
                 if (!call.isCanceled) {
                     binding.catalogProgressBar.visibility = View.GONE
-                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                        "Não foi possível conectar ao servidor.",
-                        Snackbar.LENGTH_LONG).show()
+                    setSnackbar(mainActivity, "Não foi possível conectar o servidor.")
                     Log.e("ERROR", "Falha ao executar serviço", t)
                 }
             }
@@ -177,18 +175,14 @@ class StoreCatalogFragment : Fragment() {
                     val categoriesList = response.body()
                     categoriesList?.let { updateUiWithCategories(categoriesList) }
                 } else {
-                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                        "Não é possível atualizar os dados.",
-                        Snackbar.LENGTH_LONG).show()
+                    setSnackbar(mainActivity, getResponseMessage(response.code()))
                 }
             }
 
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
                 if (!call.isCanceled) {
                     binding.catalogProgressBar.visibility = View.GONE
-                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                        "Não foi possível conectar ao servidor.",
-                        Snackbar.LENGTH_LONG).show()
+                    setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                     Log.e("ERROR", "Falha ao executar serviço", t)
                 }
             }
@@ -219,9 +213,7 @@ class StoreCatalogFragment : Fragment() {
             override fun onFailure(call: Call<List<Item>>, t: Throwable) {
                 if (!call.isCanceled) {
                     binding.catalogProgressBar.visibility = View.GONE
-                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                        "Não foi possível conectar ao servidor.",
-                        Snackbar.LENGTH_LONG).show()
+                    setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                     Log.e("ERROR", "Falha ao executar serviço", t)
                 }
             }
