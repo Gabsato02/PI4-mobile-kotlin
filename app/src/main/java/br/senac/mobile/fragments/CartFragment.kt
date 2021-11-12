@@ -6,21 +6,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import br.senac.mobile.R
 import br.senac.mobile.database.Database
 import br.senac.mobile.databinding.FragmentCartBinding
 import br.senac.mobile.databinding.ShoppingCartCardBinding
 import br.senac.mobile.services.API
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import java.lang.Exception
 import kotlin.concurrent.thread
+import android.view.inputmethod.EditorInfo
+import br.senac.mobile.models.Cart
+import br.senac.mobile.models.Order
+import br.senac.mobile.models.OrderCreate
+import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CartFragment : Fragment() {
     lateinit var binding: FragmentCartBinding
@@ -39,54 +42,9 @@ class CartFragment : Fragment() {
             getCartItems()
         }
 
-//        val cartCardBinding = ShoppingCartCardBinding.inflate(layoutInflater)
-//        val cartCardBinding2 = ShoppingCartCardBinding.inflate(layoutInflater)
-//        val cartCardBinding3 = ShoppingCartCardBinding.inflate(layoutInflater)
-//
-//        val spinnerItems = arrayOf("1", "2", "3", "4", "5")
-//        val adapter = context?.let {
-//            ArrayAdapter(
-//                it,
-//                android.R.layout.simple_spinner_item,
-//                spinnerItems
-//            )
-//        }
-//        adapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//
-//
-//        cartCardBinding.itemImage.setImageResource(R.drawable.sword)
-//        cartCardBinding.itemPriceText.text = "12 PO"
-//        cartCardBinding.itemNameText.text = "Espada Bastarda"
-//        cartCardBinding.quantitySpinner.adapter = adapter
-//
-//        cartCardBinding2.itemImage.setImageResource(R.drawable.sword)
-//        cartCardBinding2.itemPriceText.text = "10 PO"
-//        cartCardBinding2.itemNameText.text = "Espada Longa"
-//        cartCardBinding2.quantitySpinner.adapter = adapter
-//
-//        cartCardBinding3.itemImage.setImageResource(R.drawable.sword)
-//        cartCardBinding3.itemPriceText.text = "4 PP"
-//        cartCardBinding3.itemNameText.text = "Espada Curta"
-//        cartCardBinding3.quantitySpinner.adapter = adapter
-//
-//        binding.cartLinearLayout.addView(cartCardBinding.root, 0)
-//        binding.cartLinearLayout.addView(cartCardBinding2.root, 1)
-//        binding.cartLinearLayout.addView(cartCardBinding3.root, 2)
-//
-//
-//        cartCardBinding.cartCard.setOnClickListener {
-//            val fragment = ItemFragment.newInstance(1)
-//            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
-//                .addToBackStack("cart").commit()
-//            true
-//        }
-//
-//        binding.button.setOnClickListener {
-//            val fragment = PurchaseFragment()
-//            parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
-//                .addToBackStack("cart").commit()
-//            true
-//        }
+        binding.finishButton.setOnClickListener {
+            createOrder()
+        }
 
         return binding.root
     }
@@ -94,6 +52,46 @@ class CartFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         getCartItems()
+    }
+
+    private fun addItemsToOrder(orderCreateBody: OrderCreate) {
+        // ADICIONAR ITENS AO PEDIDO
+        val fragment = PurchaseFragment()
+        parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
+            .addToBackStack("cart").commit()
+        true
+    }
+
+    private fun createOrder() {
+        val mainActivity = activity as AppCompatActivity
+        // TODO O ID DEVE SER PASSADO DINAMICAMENTE
+        val orderCreateBody = OrderCreate(1, 1)
+
+        val callback = object: Callback<Int> {
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+
+                if (response.isSuccessful) {
+                    addItemsToOrder(orderCreateBody)
+                } else {
+                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                        "Não é possível finalizar a compra",
+                        Snackbar.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Int>, t: Throwable) {
+                binding.cartProgressBar.visibility = View.GONE
+
+                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
+                    "Não foi possível conectar ao servidor.",
+                    Snackbar.LENGTH_LONG).show()
+                Log.e("ERROR", "Falha ao executar serviço", t)
+            }
+
+        }
+
+        API().order.postOrder(orderCreateBody).enqueue(callback)
+        binding.cartProgressBar.visibility = View.VISIBLE
     }
 
     private fun getCartItems() {
@@ -104,54 +102,80 @@ class CartFragment : Fragment() {
 
         thread {
             val cartItems = db.cartDao().list()
+            var currentCartList = emptyList<String>()
             var totalPrice = 0
 
             mainActivity.runOnUiThread {
-                cartItems.forEach {
-                    val cartCardBinding = ShoppingCartCardBinding.inflate(layoutInflater)
-                    totalPrice += it.price.toInt() * it.quantity.toInt()
+                if (cartItems.isNotEmpty()) {
+                    cartItems.forEach {
+                        if (!currentCartList.contains(it.itemId.toString())) {
+                            currentCartList += it.itemId.toString()
+                            val cartCardBinding = ShoppingCartCardBinding.inflate(layoutInflater)
+                            totalPrice += it.price.toInt() * it.quantity.toInt()
 
-                    cartCardBinding.itemImage.setImageResource(R.drawable.sword)
-                    cartCardBinding.itemNameText.text = it.name
-                    cartCardBinding.itemPriceText.text = it.price
-                    cartCardBinding.itemQuantityInput.setText(it.quantity)
-                    Picasso
-                        .get()
-                        .load("${API().baseUrl}image/item/${it.itemId}")
-                        .error(R.drawable.no_image)
-                        .into(cartCardBinding.itemImage, object : com.squareup.picasso.Callback {
-                            override fun onSuccess() {
-                                cartCardBinding.cartImageProgressBar.visibility = View.GONE
+                            cartCardBinding.itemImage.setImageResource(R.drawable.sword)
+                            cartCardBinding.itemNameText.text = it.name
+                            cartCardBinding.itemPriceText.text = it.price
+                            cartCardBinding.itemQuantityInput.setText(it.quantity)
+                            Picasso
+                                .get()
+                                .load("${API().baseUrl}image/item/${it.itemId}")
+                                .error(R.drawable.no_image)
+                                .into(
+                                    cartCardBinding.itemImage,
+                                    object : com.squareup.picasso.Callback {
+                                        override fun onSuccess() {
+                                            cartCardBinding.cartImageProgressBar.visibility = View.GONE
+                                        }
+
+                                        override fun onError(e: Exception?) {
+                                            cartCardBinding.cartImageProgressBar.visibility = View.GONE
+                                        }
+                                    })
+
+                            cartCardBinding.itemDeleteText.setOnClickListener { _ ->
+                                thread { it.itemId?.let { itemId -> db.cartDao().delete(itemId) } }
+                                getCartItems()
                             }
 
-                            override fun onError(e: Exception?) {
-                                cartCardBinding.cartImageProgressBar.visibility = View.GONE
+                            cartCardBinding.itemText.setOnClickListener { _ ->
+                                val fragment = ItemFragment.newInstance(it.itemId)
+                                parentFragmentManager.beginTransaction()
+                                    .replace(R.id.mainFragmentContainer, fragment)
+                                    .addToBackStack("cart").commit()
+                                true
                             }
-                        })
 
-                    cartCardBinding.itemDeleteText.setOnClickListener { _ ->
-                        thread { it.id?.let { itemId -> db.cartDao().delete(itemId) } }
-                        getCartItems()
-                    }
+                            cartCardBinding.itemQuantityInput.doOnTextChanged { text, _, _, _ ->
+                                if (!text.isNullOrEmpty()) {
+                                    val quantity = text.toString()
+                                    thread {
+                                        it.id?.let { itemId ->
+                                            db.cartDao().update(quantity.toInt(), itemId)
+                                        }
+                                    }
+                                }
+                            }
 
-                    cartCardBinding.itemQuantityInput.doOnTextChanged { text, start, before, count ->
-                        // TODO Atualizar de forma reativa
-                        if (!text.isNullOrEmpty()) {
-                            val quantity = text.toString()
-                            thread { it.id?.let { itemId ->
-                                db.cartDao().update(quantity.toInt(), itemId)
-                            } }
-                            getCartItems()
+                            cartCardBinding.itemQuantityInput.setOnEditorActionListener { _, actionId, _ ->
+                                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO) {
+                                    getCartItems()
+                                    true
+                                }
+                                false
+                            }
+
+                            binding.cartLinearLayout.addView(cartCardBinding.root, 0)
                         }
+                        binding.cartProgressBar.visibility = View.GONE
+                        binding.swipeRefresh.isRefreshing = false
+                        binding.priceText.text = "Total: ${totalPrice.toString()} PO"
                     }
-
-                    binding.cartLinearLayout.addView(cartCardBinding.root, 0)
+                } else {
                     binding.cartProgressBar.visibility = View.GONE
                     binding.swipeRefresh.isRefreshing = false
+                    binding.priceText.text = "Total: 0 PO"
                 }
-                binding.cartProgressBar.visibility = View.GONE
-                binding.swipeRefresh.isRefreshing = false
-                binding.priceText.text = "Total: ${totalPrice.toString()} PO"
             }
         }
     }
