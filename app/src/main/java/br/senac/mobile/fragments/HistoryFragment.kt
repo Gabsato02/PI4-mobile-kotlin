@@ -13,6 +13,8 @@ import br.senac.mobile.databinding.HistoryItemCardBinding
 import br.senac.mobile.models.Order
 import br.senac.mobile.services.API
 import br.senac.mobile.utils.formatDate
+import br.senac.mobile.utils.getResponseMessage
+import br.senac.mobile.utils.setSnackbar
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -107,19 +109,14 @@ class HistoryFragment : Fragment() {
                     val orderList = response.body()
                     orderList?.let { updateUI(orderList) }
                 } else {
-                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                        "Não é possível atualizar os dados.",
-                        Snackbar.LENGTH_LONG).show()
+                    setSnackbar(mainActivity, getResponseMessage(response.code()))
                 }
             }
 
             override fun onFailure(call: Call<List<Order>>, t: Throwable) {
                 binding.orderProgressBar.visibility = View.GONE
                 binding.swipeRefresh.isRefreshing = false
-
-                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                    "Não foi possível conectar ao servidor.",
-                    Snackbar.LENGTH_LONG).show()
+                setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                 Log.e("ERROR", "Falha ao executar serviço", t)
             }
 

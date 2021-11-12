@@ -22,8 +22,8 @@ import retrofit2.Response
 import java.lang.Exception
 import kotlin.concurrent.thread
 import android.graphics.Bitmap
-
-
+import br.senac.mobile.utils.getResponseMessage
+import br.senac.mobile.utils.setSnackbar
 
 
 private const val ARG_PARAM1 = "itemId"
@@ -128,18 +128,13 @@ class ItemFragment: Fragment() {
                     val item = response.body()
                     item?.let { updateUI(item) }
                 } else {
-                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                        "Não é possível atualizar os dados.",
-                        Snackbar.LENGTH_LONG).show()
+                    setSnackbar(mainActivity, getResponseMessage(response.code()))
                 }
             }
 
             override fun onFailure(call: Call<Item>, t: Throwable) {
                 binding.itemFragCardProgressBar.visibility = View.GONE
-
-                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                    "Não foi possível conectar ao servidor.",
-                    Snackbar.LENGTH_LONG).show()
+                setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                 Log.e("ERROR", "Falha ao executar serviço", t)
             }
         }

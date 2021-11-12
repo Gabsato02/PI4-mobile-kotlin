@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import br.senac.mobile.adapters.CategoryRecyclerViewAdapter
 import br.senac.mobile.services.API
 import br.senac.mobile.utils.GridSpacingItemDecoration
+import br.senac.mobile.utils.getResponseMessage
+import br.senac.mobile.utils.setSnackbar
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,18 +64,13 @@ class HomeFragment : Fragment() {
                     }
                     categoryList?.let { updateUI(categoryList) }
                 } else {
-                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                        "Não é possível atualizar os dados.",
-                        Snackbar.LENGTH_LONG).show()
+                    setSnackbar(mainActivity, getResponseMessage(response.code()))
                 }
             }
 
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
                 binding.homeProgressBar.visibility = View.GONE
-
-                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                    "Não foi possível conectar ao servidor.",
-                    Snackbar.LENGTH_LONG).show()
+                setSnackbar(mainActivity, "Não é possível conectar ao servidor.")
                 Log.e("ERROR", "Falha ao executar serviço", t)
             }
         }
