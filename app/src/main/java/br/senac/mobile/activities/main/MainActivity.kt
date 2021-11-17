@@ -1,7 +1,5 @@
 package br.senac.mobile.activities.main
 
-import android.app.SearchManager
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -10,6 +8,7 @@ import androidx.fragment.app.Fragment
 import br.senac.mobile.R
 import br.senac.mobile.databinding.ActivityMainBinding
 import android.view.MenuItem
+import androidx.core.graphics.drawable.DrawableCompat
 import br.senac.mobile.fragments.*
 
 
@@ -55,6 +54,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.options_menu, menu)
 
+        menu.findItem(R.id.scanner).icon.setTint(getColor(R.color.white))
+
         val myActionMenuItem: MenuItem = menu.findItem(R.id.search)
         val searchView = myActionMenuItem.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -74,14 +75,28 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.scanner) {
+            val fragment = QrCodeFragment()
+            supportFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
+                .addToBackStack("home").commit()
+            true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         var tag = supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name
         when(tag) {
-            "cart" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavBagButton).setChecked(true)
-            "history" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHistoryButton).setChecked(true)
-            "profile" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavProfileButton).setChecked(true)
-            else -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHomeButton).setChecked(true)
+            "cart" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavBagButton).isChecked =
+                true
+            "history" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHistoryButton).isChecked =
+                true
+            "profile" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavProfileButton).isChecked =
+                true
+            else -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHomeButton).isChecked =
+                true
         }
         return true
     }

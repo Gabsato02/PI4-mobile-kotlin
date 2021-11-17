@@ -7,4 +7,10 @@
         android:title="Buscar"
         app:showAsAction="always"
         app:actionViewClass="android.widget.SearchView"/>
+    <item
+        android:id="@+id/scanner"
+        android:icon="@drawable/ic_code_scanner_auto_focus_on"
+        android:title="QR Code"
+        app:showAsAction="always"
+        android:iconTint="@color/white"/>
 </menu>

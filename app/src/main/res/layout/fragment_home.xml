@@ -1,89 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/homeFrameLayout"
+    android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:tag="home"
-    tools:context=".fragments.HomeFragment">
-
-    <ScrollView
-        android:id="@+id/homeScrollView"
+    android:layout_height="match_parent">
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/homeFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:fillViewport="true"
-        android:isScrollContainer="false"
-        android:paddingBottom="16dp"
-        android:scrollbars="none">
+        android:tag="home"
+        tools:context=".fragments.HomeFragment">
 
-        <LinearLayout
-            android:id="@+id/homeLinearLayout"
+        <ScrollView
+            android:id="@+id/homeScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginRight="32dp"
-            android:divider="@drawable/horizontal_divider"
-            android:orientation="vertical"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:isScrollContainer="false"
             android:paddingBottom="16dp"
-            android:showDividers="middle">
+            android:scrollbars="none">
 
-            <TextView
-                android:id="@+id/homeSpotlightCardTitle"
+            <LinearLayout
+                android:id="@+id/homeLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Loja Principal"
-                android:textColor="@color/primary"
-                android:textSize="24dp" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                app:cardCornerRadius="8dp">
-
-                <ImageView
-                    android:id="@+id/homeSpotlightCardImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@drawable/bg_placeholder" />
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/homeCardListTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Categorias"
-                android:textColor="@color/primary"
-                android:textSize="24dp" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/homeCardListGrid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginRight="32dp"
+                android:divider="@drawable/horizontal_divider"
+                android:orientation="vertical"
                 android:paddingBottom="16dp"
-                android:scrollbars="vertical"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="2" />
-        </LinearLayout>
-    </ScrollView>
+                android:showDividers="middle">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom">
+                <TextView
+                    android:id="@+id/homeSpotlightCardTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Loja Principal"
+                    android:textColor="@color/primary"
+                    android:textSize="24dp" />
 
-        <ProgressBar
-            android:id="@+id/homeProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    app:cardCornerRadius="8dp">
+
+                    <ImageView
+                        android:id="@+id/homeSpotlightCardImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        app:srcCompat="@drawable/bg_placeholder" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/homeCardListTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Categorias"
+                    android:textColor="@color/primary"
+                    android:textSize="24dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/homeCardListGrid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:scrollbars="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2" />
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/primary"
-            android:progressTint="@color/primary" />
-    </RelativeLayout>
-</FrameLayout>
+            android:layout_height="match_parent"
+            android:gravity="bottom">
+
+            <ProgressBar
+                android:id="@+id/homeProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/primary"
+                android:progressTint="@color/primary" />
+        </RelativeLayout>
+    </FrameLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
