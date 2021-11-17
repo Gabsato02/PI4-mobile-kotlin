@@ -56,14 +56,16 @@ class HistoryFragment : Fragment() {
             historyCardBinding.historyIdText.text = "#${it.id.toString()}"
             historyCardBinding.historyDateText.text = formatDate(it.created_at)
             historyCardBinding.historyNameText.text = it.store.name
-            historyCardBinding.historyPriceText.text = it.order_items.sumOf { it.item.price }.toString()
+            historyCardBinding.historyPriceText.text = it.order_items.sumOf {
+                it.item.price * it.quantity
+            }.toString()
 
             it.order_items?.forEachIndexed { index, product ->
                 val historyItemCardBinding = HistoryItemCardBinding.inflate(layoutInflater)
                 historyItemCardBinding.root.tag = it.id
 
                 historyItemCardBinding.historyItemNameText.text = product.item.name
-                historyItemCardBinding.historyItemPriceText.text = product.item.price.toString()
+                historyItemCardBinding.historyItemPriceText.text = (product.item.price * product.quantity).toString()
                 Picasso
                     .get()
                     .load("${API().baseUrl}image/item/${product.item.id}")
