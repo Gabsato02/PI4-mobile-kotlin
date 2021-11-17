@@ -17,8 +17,10 @@ import com.squareup.picasso.Picasso
 import java.lang.Exception
 import kotlin.concurrent.thread
 import android.view.inputmethod.EditorInfo
+import br.senac.mobile.models.CustomResponse
+import br.senac.mobile.models.OrderAddItem
 import br.senac.mobile.models.OrderCreate
-import com.google.android.material.snackbar.Snackbar
+import br.senac.mobile.utils.setSnackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,12 +54,46 @@ class CartFragment : Fragment() {
         getCartItems()
     }
 
-    private fun addItemsToOrder(orderCreateBody: OrderCreate) {
-        // ADICIONAR ITENS AO PEDIDO
-        val fragment = PurchaseFragment()
-        parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
-            .addToBackStack("cart").commit()
-        true
+    private fun addItemsToOrder(order_id: String) {
+        val mainActivity = activity as AppCompatActivity
+        val db = Database().databaseBuilder(mainActivity.applicationContext)
+
+        try {
+            thread {
+                val cartItems = db.cartDao().list()
+
+                cartItems.forEach {
+                    val item = OrderAddItem (
+                        order_id = order_id.toInt(),
+                        item_id = it.itemId,
+                        price = it.price.toInt(),
+                        quantity = it.quantity.toInt()
+                    )
+
+                    val callback = object: Callback<CustomResponse> {
+                        override fun onResponse(call: Call<CustomResponse>, response: Response<CustomResponse>) {
+                            if (!response.isSuccessful) {
+                                setSnackbar(mainActivity, "Não é possível finalizar a compra")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<CustomResponse>, t: Throwable) {
+                            setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
+                            Log.e("ERROR", "Falha ao executar serviço", t)
+                        }
+                    }
+
+                    API().order.postAddItemToOrder(item).enqueue(callback)
+                }
+
+                val fragment = PurchaseFragment.newInstance(order_id.toInt())
+                parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
+                    .addToBackStack("cart").commit()
+                true
+            }
+        } catch (error: Error) {
+            setSnackbar(mainActivity, "Não é possível finalizar a compra")
+        }
     }
 
     private fun createOrder() {
@@ -67,25 +103,21 @@ class CartFragment : Fragment() {
 
         val callback = object: Callback<Int> {
             override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                binding.cartProgressBar.visibility = View.GONE
 
                 if (response.isSuccessful) {
-                    addItemsToOrder(orderCreateBody)
+                    addItemsToOrder(response.body().toString())
                 } else {
-                    Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                        "Não é possível finalizar a compra",
-                        Snackbar.LENGTH_LONG).show()
+                    setSnackbar(mainActivity, "Não é possível finalizar a compra")
                 }
             }
 
             override fun onFailure(call: Call<Int>, t: Throwable) {
                 binding.cartProgressBar.visibility = View.GONE
 
-                Snackbar.make(mainActivity.findViewById(R.id.mainConstraintLayout),
-                    "Não foi possível conectar ao servidor.",
-                    Snackbar.LENGTH_LONG).show()
+                setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                 Log.e("ERROR", "Falha ao executar serviço", t)
             }
-
         }
 
         API().order.postOrder(orderCreateBody).enqueue(callback)
