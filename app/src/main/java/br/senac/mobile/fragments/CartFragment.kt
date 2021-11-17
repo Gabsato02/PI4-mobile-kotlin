@@ -17,8 +17,6 @@ import com.squareup.picasso.Picasso
 import java.lang.Exception
 import kotlin.concurrent.thread
 import android.view.inputmethod.EditorInfo
-import br.senac.mobile.models.Cart
-import br.senac.mobile.models.Order
 import br.senac.mobile.models.OrderCreate
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call

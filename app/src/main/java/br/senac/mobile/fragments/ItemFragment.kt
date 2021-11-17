@@ -14,14 +14,12 @@ import br.senac.mobile.databinding.TraitsCharacCardBinding
 import br.senac.mobile.models.Cart
 import br.senac.mobile.models.Item
 import br.senac.mobile.services.API
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Exception
 import kotlin.concurrent.thread
-import android.graphics.Bitmap
 import br.senac.mobile.utils.getResponseMessage
 import br.senac.mobile.utils.setSnackbar
 
@@ -58,6 +56,11 @@ class ItemFragment: Fragment() {
     }
 
     private fun updateUI(item: Item) {
+        if (layoutInflater != null) {
+            binding.itemFragCharacteristicLinearLayout.removeAllViews()
+            binding.itemFragTraitLinearLayout.removeAllViews()
+        }
+
         val mainActivity = activity as AppCompatActivity
         val db = Database().databaseBuilder(mainActivity.applicationContext)
         binding.itemFragNameText.text = item.name

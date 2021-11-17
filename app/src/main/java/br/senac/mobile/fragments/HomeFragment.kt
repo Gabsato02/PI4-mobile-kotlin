@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import br.senac.mobile.R
 import br.senac.mobile.databinding.*
 import br.senac.mobile.models.Category
@@ -16,7 +15,6 @@ import br.senac.mobile.services.API
 import br.senac.mobile.utils.GridSpacingItemDecoration
 import br.senac.mobile.utils.getResponseMessage
 import br.senac.mobile.utils.setSnackbar
-import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +35,6 @@ class HomeFragment : Fragment() {
             true
         }
         binding.homeCardListGrid.adapter = CategoryRecyclerViewAdapter(listOf<Category>(), parentFragmentManager)
-
         return binding.root
     }
 
