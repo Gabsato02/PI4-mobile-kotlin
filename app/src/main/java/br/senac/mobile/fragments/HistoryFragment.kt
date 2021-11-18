@@ -15,7 +15,6 @@ import br.senac.mobile.services.API
 import br.senac.mobile.utils.formatDate
 import br.senac.mobile.utils.getResponseMessage
 import br.senac.mobile.utils.setSnackbar
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback

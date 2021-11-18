@@ -34,7 +34,13 @@ class HomeFragment : Fragment() {
                 .addToBackStack("home").commit()
             true
         }
+
         binding.homeCardListGrid.adapter = CategoryRecyclerViewAdapter(listOf<Category>(), parentFragmentManager)
+
+        binding.swipeRefresh.setOnRefreshListener {
+            getCategoryList()
+        }
+
         return binding.root
     }
 
@@ -54,6 +60,7 @@ class HomeFragment : Fragment() {
         val callback = object: Callback<List<Category>> {
             override fun onResponse(call: Call<List<Category>>, response: Response<List<Category>>) {
                 binding.homeProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
 
                 if (response.isSuccessful) {
                     val categoryList = response.body()?.filter {
@@ -67,6 +74,7 @@ class HomeFragment : Fragment() {
 
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
                 binding.homeProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
                 setSnackbar(mainActivity, "Não é possível conectar ao servidor.")
                 Log.e("ERROR", "Falha ao executar serviço", t)
             }

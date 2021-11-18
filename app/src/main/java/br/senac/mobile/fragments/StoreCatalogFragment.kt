@@ -54,6 +54,14 @@ class StoreCatalogFragment : Fragment() {
         mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mainActivity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow)
 
+        binding.swipeRefresh.setOnRefreshListener {
+            when(catalogType) {
+                "category" -> getItemsListByCategory()
+                "general" -> getAllItems()
+                else -> getItemsListBySearch()
+            }
+        }
+
         return binding.root
     }
 
@@ -64,7 +72,6 @@ class StoreCatalogFragment : Fragment() {
             "general" -> getAllItems()
             else -> getItemsListBySearch()
         }
-
     }
 
     private fun updateUiWithCategories(categoriesList: List<Category>) {
@@ -140,6 +147,8 @@ class StoreCatalogFragment : Fragment() {
         val callback = object: Callback<Category> {
             override fun onResponse(call: Call<Category>, response: Response<Category>) {
                 binding.catalogProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
+
                 if (response.isSuccessful) {
                     val categoryList = mutableListOf<Category>()
                     response.body()?.let { categoryList.add(it) }
@@ -151,6 +160,7 @@ class StoreCatalogFragment : Fragment() {
 
             override fun onFailure(call: Call<Category>, t: Throwable) {
                 if (!call.isCanceled) {
+                    binding.swipeRefresh.isRefreshing = false
                     binding.catalogProgressBar.visibility = View.GONE
                     setSnackbar(mainActivity, "Não foi possível conectar o servidor.")
                     Log.e("ERROR", "Falha ao executar serviço", t)
@@ -170,6 +180,8 @@ class StoreCatalogFragment : Fragment() {
         val callback = object: Callback<List<Category>> {
             override fun onResponse(call: Call<List<Category>>, response: Response<List<Category>>) {
                 binding.catalogProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
+
                 if (response.isSuccessful) {
                     val categoriesList = response.body()
                     categoriesList?.let { updateUiWithCategories(categoriesList) }
@@ -180,6 +192,7 @@ class StoreCatalogFragment : Fragment() {
 
             override fun onFailure(call: Call<List<Category>>, t: Throwable) {
                 if (!call.isCanceled) {
+                    binding.swipeRefresh.isRefreshing = false
                     binding.catalogProgressBar.visibility = View.GONE
                     setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                     Log.e("ERROR", "Falha ao executar serviço", t)
@@ -199,6 +212,7 @@ class StoreCatalogFragment : Fragment() {
         val callback = object: Callback<List<Item>> {
             override fun onResponse(call: Call<List<Item>>, response: Response<List<Item>>) {
                 binding.catalogProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
                 if (response.isSuccessful) {
                     val itemsList = response.body()
                     itemsList?.let { updateUiWithSearch(itemsList) }
@@ -211,6 +225,7 @@ class StoreCatalogFragment : Fragment() {
 
             override fun onFailure(call: Call<List<Item>>, t: Throwable) {
                 if (!call.isCanceled) {
+                    binding.swipeRefresh.isRefreshing = false
                     binding.catalogProgressBar.visibility = View.GONE
                     setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                     Log.e("ERROR", "Falha ao executar serviço", t)

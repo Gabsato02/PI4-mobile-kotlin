@@ -33,7 +33,7 @@ class ProfileFragment : Fragment() {
         mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mainActivity.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow)
 
-        binding.profilePasswordCheckbox.setOnCheckedChangeListener { compoundButton, bool ->
+        binding.profilePasswordCheckbox.setOnCheckedChangeListener { _, bool ->
             if (bool) {
                 binding.passwordLinearLayout.visibility = View.VISIBLE
             } else {
@@ -46,6 +46,10 @@ class ProfileFragment : Fragment() {
 
         binding.profileButton.setOnClickListener {
             prepareUserData(mainActivity)
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            getUserData()
         }
 
         return binding.root
@@ -81,6 +85,7 @@ class ProfileFragment : Fragment() {
         val callback = object: Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 binding.profileProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
 
                 if (response.isSuccessful) {
                     userData = response.body()!!
@@ -92,6 +97,7 @@ class ProfileFragment : Fragment() {
 
             override fun onFailure(call: Call<User>, t: Throwable) {
                 binding.profileProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
                 setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                 Log.e("ERROR", "Falha ao executar serviço", t)
             }
@@ -122,17 +128,17 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        API().user.updateUser(user.id, user).enqueue(callback)
+        user.id?.let { API().user.updateUser(it, user).enqueue(callback) }
         binding.profileProgressBar.visibility = View.VISIBLE
     }
 
     private fun prepareUserData(mainActivity: AppCompatActivity) {
         var hasError = false
-        val passwordText = binding.profilePasswordTextInput.getText().toString()
-        val newPasswordText = binding.profileNewPasswordTextInput.getText().toString()
-        val confirmPasswordText = binding.profileConfirmPasswordTextInput.getText().toString()
-        val emailText = binding.profileEmailTextInput.getText().toString()
-        val nameText = binding.profileNameTextInput.getText().toString()
+        val passwordText = binding.profilePasswordTextInput.text.toString()
+        val newPasswordText = binding.profileNewPasswordTextInput.text.toString()
+        val confirmPasswordText = binding.profileConfirmPasswordTextInput.text.toString()
+        val emailText = binding.profileEmailTextInput.text.toString()
+        val nameText = binding.profileNameTextInput.text.toString()
 
         if (binding.profilePasswordCheckbox.isChecked) {
             if (passwordText.isNullOrEmpty() || passwordText.length < 8) {

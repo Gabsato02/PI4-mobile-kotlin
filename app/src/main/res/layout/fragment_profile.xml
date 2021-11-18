@@ -1,262 +1,268 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:tag="profile"
-    tools:context=".fragments.ProfileFragment" >
-
-    <ScrollView
-        android:id="@+id/profileScroll"
+    android:layout_height="match_parent">
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/red_texture">
+        android:tag="profile"
+        tools:context=".fragments.ProfileFragment" >
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
+            android:id="@+id/profileScroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/red_texture">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/profileCardView"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="32dp"
-                app:cardCornerRadius="100dp"
-                app:cardElevation="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <ProgressBar
-                    android:id="@+id/profileImagePogressBar"
-                    style="?android:attr/progressBarStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/tertiary"
-                    android:indeterminate="true"
-                    android:indeterminateTint="@color/primary" />
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/profileCardView"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginEnd="32dp"
+                    app:cardCornerRadius="100dp"
+                    app:cardElevation="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/profileUserImage"
+                    <ProgressBar
+                        android:id="@+id/profileImagePogressBar"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/tertiary"
+                        android:indeterminate="true"
+                        android:indeterminateTint="@color/primary" />
+
+                    <ImageView
+                        android:id="@+id/profileUserImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        tools:src="@tools:sample/avatars" />
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/profileLinearLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    tools:src="@tools:sample/avatars" />
-            </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:id="@+id/profileLinearLayout"
+                    <ImageView
+                        android:id="@+id/profileBackgroundImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="140dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/profile" />
+
+                    <ImageView
+                        android:id="@+id/profileBackgroundSeparatorImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:scaleType="center"
+                        android:src="@drawable/separator" />
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/profileNameTextInputLayout"
+                    android:layout_width="280dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="64dp"
+                    android:background="@drawable/old_golden_texture"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:hint="Nome"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profileCardView">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/profileNameTextInput"
+                        android:layout_width="272dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/golden_texture"
+                        android:backgroundTint="@color/transparent"
+                        android:backgroundTintMode="add"
+                        android:textColor="@color/primary"
+                        android:textColorLink="@color/primary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/profileEmailTextInputLayout"
+                    android:layout_width="280dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="64dp"
+                    android:background="@drawable/old_golden_texture"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:hint="E-mail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profileNameTextInputLayout">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/profileEmailTextInput"
+                        android:layout_width="272dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/golden_texture"
+                        android:backgroundTint="@color/transparent"
+                        android:backgroundTintMode="add"
+                        android:textColor="@color/primary"
+                        android:textColorLink="@color/primary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/profilePasswordCheckbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginEnd="64dp"
+                    android:layout_marginBottom="16dp"
+                    android:buttonTint="@color/secondary"
+                    android:text="Desejo alterar minha senha"
+                    android:textColor="@color/secondary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profileEmailTextInputLayout" />
+
+                <LinearLayout
+                    android:id="@+id/passwordLinearLayout"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginEnd="64dp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profilePasswordCheckbox">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/profilePasswordTextInputLayout"
+                        android:layout_width="280dp"
+                        android:layout_height="56dp"
+                        android:background="@drawable/old_golden_texture"
+                        android:foregroundGravity="center"
+                        android:gravity="center"
+                        android:hint="Senha atual"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="@color/primary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/profilePasswordTextInput"
+                            android:layout_width="272dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/golden_texture"
+                            android:backgroundTint="@color/transparent"
+                            android:backgroundTintMode="add"
+                            android:inputType="textPassword"
+                            android:password="true"
+                            android:textColor="@color/primary"
+                            android:textColorLink="@color/primary" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/profileNewPasswordTextInputLayout"
+                        android:layout_width="280dp"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/old_golden_texture"
+                        android:foregroundGravity="center"
+                        android:gravity="center"
+                        android:hint="Nova senha"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="@color/primary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/profileNewPasswordTextInput"
+                            android:layout_width="272dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/golden_texture"
+                            android:backgroundTint="@color/transparent"
+                            android:backgroundTintMode="add"
+                            android:inputType="textPassword"
+                            android:password="true"
+                            android:textColor="@color/primary"
+                            android:textColorLink="@color/primary" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/profileConfirmPasswordTextInputLayout"
+                        android:layout_width="280dp"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/old_golden_texture"
+                        android:foregroundGravity="center"
+                        android:gravity="center"
+                        android:hint="Confirme sua senha"
+                        app:passwordToggleEnabled="true"
+                        app:passwordToggleTint="@color/primary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/profileConfirmPasswordTextInput"
+                            android:layout_width="272dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/golden_texture"
+                            android:backgroundTint="@color/transparent"
+                            android:backgroundTintMode="add"
+                            android:inputType="textPassword"
+                            android:password="true"
+                            android:textColor="@color/primary"
+                            android:textColorLink="@color/primary" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/profileButton"
+                    android:layout_width="152dp"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="64dp"
+                    android:layout_marginBottom="58dp"
+                    android:background="@drawable/paper_texture"
+                    android:text="SALVAR"
+                    android:textColor="@color/primary"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/passwordLinearLayout" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom">
+
+            <ProgressBar
+                android:id="@+id/profileProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/profileBackgroundImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/profile" />
-
-                <ImageView
-                    android:id="@+id/profileBackgroundSeparatorImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="8dp"
-                    android:scaleType="center"
-                    android:src="@drawable/separator" />
-            </LinearLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/profileNameTextInputLayout"
-                android:layout_width="280dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="64dp"
-                android:background="@drawable/old_golden_texture"
-                android:foregroundGravity="center"
-                android:gravity="center"
-                android:hint="Nome"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profileCardView">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profileNameTextInput"
-                    android:layout_width="272dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/golden_texture"
-                    android:backgroundTint="@color/transparent"
-                    android:backgroundTintMode="add"
-                    android:textColor="@color/primary"
-                    android:textColorLink="@color/primary" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/profileEmailTextInputLayout"
-                android:layout_width="280dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="64dp"
-                android:background="@drawable/old_golden_texture"
-                android:foregroundGravity="center"
-                android:gravity="center"
-                android:hint="E-mail"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profileNameTextInputLayout">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/profileEmailTextInput"
-                    android:layout_width="272dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/golden_texture"
-                    android:backgroundTint="@color/transparent"
-                    android:backgroundTintMode="add"
-                    android:textColor="@color/primary"
-                    android:textColorLink="@color/primary" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <CheckBox
-                android:id="@+id/profilePasswordCheckbox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
-                android:layout_marginEnd="64dp"
-                android:layout_marginBottom="16dp"
-                android:buttonTint="@color/secondary"
-                android:text="Desejo alterar minha senha"
-                android:textColor="@color/secondary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profileEmailTextInputLayout" />
-
-            <LinearLayout
-                android:id="@+id/passwordLinearLayout"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
-                android:layout_marginEnd="64dp"
-                android:orientation="vertical"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profilePasswordCheckbox">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/profilePasswordTextInputLayout"
-                    android:layout_width="280dp"
-                    android:layout_height="56dp"
-                    android:background="@drawable/old_golden_texture"
-                    android:foregroundGravity="center"
-                    android:gravity="center"
-                    android:hint="Senha atual"
-                    app:passwordToggleEnabled="true"
-                    app:passwordToggleTint="@color/primary">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/profilePasswordTextInput"
-                        android:layout_width="272dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/golden_texture"
-                        android:backgroundTint="@color/transparent"
-                        android:backgroundTintMode="add"
-                        android:inputType="textPassword"
-                        android:password="true"
-                        android:textColor="@color/primary"
-                        android:textColorLink="@color/primary" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/profileNewPasswordTextInputLayout"
-                    android:layout_width="280dp"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/old_golden_texture"
-                    android:foregroundGravity="center"
-                    android:gravity="center"
-                    android:hint="Nova senha"
-                    app:passwordToggleEnabled="true"
-                    app:passwordToggleTint="@color/primary">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/profileNewPasswordTextInput"
-                        android:layout_width="272dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/golden_texture"
-                        android:backgroundTint="@color/transparent"
-                        android:backgroundTintMode="add"
-                        android:inputType="textPassword"
-                        android:password="true"
-                        android:textColor="@color/primary"
-                        android:textColorLink="@color/primary" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/profileConfirmPasswordTextInputLayout"
-                    android:layout_width="280dp"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/old_golden_texture"
-                    android:foregroundGravity="center"
-                    android:gravity="center"
-                    android:hint="Confirme sua senha"
-                    app:passwordToggleEnabled="true"
-                    app:passwordToggleTint="@color/primary">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/profileConfirmPasswordTextInput"
-                        android:layout_width="272dp"
-                        android:layout_height="50dp"
-                        android:background="@drawable/golden_texture"
-                        android:backgroundTint="@color/transparent"
-                        android:backgroundTintMode="add"
-                        android:inputType="textPassword"
-                        android:password="true"
-                        android:textColor="@color/primary"
-                        android:textColorLink="@color/primary" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/profileButton"
-                android:layout_width="152dp"
-                android:layout_height="52dp"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="64dp"
-                android:layout_marginBottom="58dp"
-                android:background="@drawable/paper_texture"
-                android:text="SALVAR"
-                android:textColor="@color/primary"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/passwordLinearLayout" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom">
-
-        <ProgressBar
-            android:id="@+id/profileProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/secondary" />
-    </RelativeLayout>
-
-</FrameLayout>
+                android:indeterminate="true"
+                android:indeterminateTint="@color/secondary" />
+        </RelativeLayout>
+    </FrameLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
