@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.*
 import br.senac.mobile.R
 import br.senac.mobile.databinding.FragmentQrCodeBinding
@@ -69,7 +70,7 @@ class QrCodeFragment : Fragment() {
     private fun checkCameraPermission() {
         if (checkSelfPermission(activity as AppCompatActivity, Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity as AppCompatActivity, arrayOf(Manifest.permission.CAMERA), 1)
+            requestPermissions(arrayOf(Manifest.permission.CAMERA), 1)
         } else {
             grantedPermission = true
             initializeReader()
@@ -108,6 +109,12 @@ class QrCodeFragment : Fragment() {
             .setMessage("É necessário habilitar a permissão de acesso a câmera.")
             .setCancelable(false)
             .setPositiveButton("Ir para configurações") { _: DialogInterface, _: Int ->
+                val fragment = HomeFragment()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.mainFragmentContainer, fragment)
+                    .addToBackStack("home").commit()
+                true
+
                 val i = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 i.data = Uri.fromParts("package", mainActivity.packageName, null)
                 startActivity(i)
