@@ -109,6 +109,8 @@ class QrCodeFragment : Fragment() {
             .setMessage("É necessário habilitar a permissão de acesso a câmera.")
             .setCancelable(false)
             .setPositiveButton("Ir para configurações") { _: DialogInterface, _: Int ->
+                mainActivity.supportFragmentManager.beginTransaction().remove(this).commit()
+
                 val fragment = HomeFragment()
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.mainFragmentContainer, fragment)
