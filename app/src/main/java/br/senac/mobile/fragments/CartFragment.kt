@@ -86,6 +86,7 @@ class CartFragment : Fragment() {
                     API().order.postAddItemToOrder(item).enqueue(callback)
                 }
 
+                db.cartDao().deleteAll()
                 val fragment = PurchaseFragment.newInstance(order_id.toInt())
                 parentFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
                     .addToBackStack("cart").commit()
@@ -109,6 +110,7 @@ class CartFragment : Fragment() {
                     addItemsToOrder(response.body().toString())
                 } else {
                     setSnackbar(mainActivity, "Não é possível finalizar a compra")
+                    Log.e("ERROR", response.errorBody().toString())
                 }
             }
 
