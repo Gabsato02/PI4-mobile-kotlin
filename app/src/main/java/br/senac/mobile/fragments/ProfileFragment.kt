@@ -48,6 +48,10 @@ class ProfileFragment : Fragment() {
             prepareUserData(mainActivity)
         }
 
+        binding.swipeRefresh.setOnRefreshListener {
+            getUserData()
+        }
+
         return binding.root
     }
 
@@ -81,6 +85,7 @@ class ProfileFragment : Fragment() {
         val callback = object: Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 binding.profileProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
 
                 if (response.isSuccessful) {
                     userData = response.body()!!
@@ -92,6 +97,7 @@ class ProfileFragment : Fragment() {
 
             override fun onFailure(call: Call<User>, t: Throwable) {
                 binding.profileProgressBar.visibility = View.GONE
+                binding.swipeRefresh.isRefreshing = false
                 setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                 Log.e("ERROR", "Falha ao executar serviço", t)
             }
