@@ -129,7 +129,7 @@ class ItemFragment: Fragment() {
 
         val callback = object: Callback<Item> {
             override fun onResponse(call: Call<Item>, response: Response<Item>) {
-                binding.itemFragCardProgressBar.visibility = View.GONE
+                binding.itemFragCardProgressBar.visibility = View.INVISIBLE
                 binding.swipeRefresh.isRefreshing = false
 
                 if (response.isSuccessful) {
@@ -141,7 +141,7 @@ class ItemFragment: Fragment() {
             }
 
             override fun onFailure(call: Call<Item>, t: Throwable) {
-                binding.itemFragCardProgressBar.visibility = View.GONE
+                binding.itemFragCardProgressBar.visibility = View.INVISIBLE
                 binding.swipeRefresh.isRefreshing = false
                 setSnackbar(mainActivity, "Não foi possível conectar ao servidor.")
                 Log.e("ERROR", "Falha ao executar serviço", t)
