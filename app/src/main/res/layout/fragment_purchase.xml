@@ -16,15 +16,42 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/purchaseFragTextView"
+                android:id="@+id/purchaseCompletion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="32dp"
+                android:paddingTop="32dp"
+                android:paddingRight="32dp"
+                android:paddingBottom="32dp"
+                android:text="Muito obrigado aventureiro, processando pedido."
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/purchaseTotalText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
                 android:paddingTop="24dp"
                 android:paddingRight="24dp"
                 android:textColor="@color/primary"
-                android:textSize="24sp" />
+                android:textSize="16sp" />
+
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+
+        <ProgressBar
+            android:id="@+id/purchaseProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/primary" />
+    </RelativeLayout>
 
 </FrameLayout>

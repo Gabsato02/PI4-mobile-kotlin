@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doOnTextChanged
+import androidx.core.view.size
 import br.senac.mobile.R
 import br.senac.mobile.database.Database
 import br.senac.mobile.databinding.FragmentCartBinding
@@ -16,7 +16,6 @@ import br.senac.mobile.services.API
 import com.squareup.picasso.Picasso
 import java.lang.Exception
 import kotlin.concurrent.thread
-import android.view.inputmethod.EditorInfo
 import br.senac.mobile.models.CustomResponse
 import br.senac.mobile.models.OrderAddItem
 import br.senac.mobile.models.OrderCreate
@@ -43,7 +42,9 @@ class CartFragment : Fragment() {
         }
 
         binding.finishButton.setOnClickListener {
-            createOrder()
+            if (binding.cartLinearLayout.size != 0) {
+                createOrder()
+            }
         }
 
         return binding.root
@@ -178,23 +179,26 @@ class CartFragment : Fragment() {
                                 true
                             }
 
-                            cartCardBinding.itemQuantityInput.doOnTextChanged { text, _, _, _ ->
-                                if (!text.isNullOrEmpty()) {
-                                    val quantity = text.toString()
+                            cartCardBinding.itemLess.setOnClickListener { _ ->
+                                val quantity = (it.quantity.toInt() - 1)
+                                if (quantity > 0) {
                                     thread {
                                         it.id?.let { itemId ->
-                                            db.cartDao().update(quantity.toInt(), itemId)
+                                            db.cartDao().update(quantity, itemId)
                                         }
                                     }
+                                    getCartItems()
                                 }
                             }
 
-                            cartCardBinding.itemQuantityInput.setOnEditorActionListener { _, actionId, _ ->
-                                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_GO) {
-                                    getCartItems()
-                                    true
+                            cartCardBinding.itemMore.setOnClickListener { _ ->
+                                val quantity = (it.quantity.toInt() + 1)
+                                thread {
+                                    it.id?.let { itemId ->
+                                        db.cartDao().update(quantity, itemId)
+                                    }
                                 }
-                                false
+                                getCartItems()
                             }
 
                             binding.cartLinearLayout.addView(cartCardBinding.root, 0)
@@ -202,11 +206,13 @@ class CartFragment : Fragment() {
                         binding.cartProgressBar.visibility = View.GONE
                         binding.swipeRefresh.isRefreshing = false
                         binding.priceText.text = "Total: ${totalPrice.toString()} PO"
+                        binding.emptyCartText.visibility = View.GONE
                     }
                 } else {
                     binding.cartProgressBar.visibility = View.GONE
                     binding.swipeRefresh.isRefreshing = false
                     binding.priceText.text = "Total: 0 PO"
+                    binding.emptyCartText.visibility = View.VISIBLE
                 }
             }
         }

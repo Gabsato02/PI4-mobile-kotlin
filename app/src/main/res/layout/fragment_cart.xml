@@ -13,6 +13,16 @@
         android:tag="cart"
         tools:context=".fragments.CartFragment">
 
+        <TextView
+            android:id="@+id/emptyCartText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:gravity="center"
+            android:text="Sacola vazia. O que precisa para continuar sua aventura?"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -28,7 +38,9 @@
                     android:id="@+id/cartLinearLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical" />
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </ScrollView>
 
             <LinearLayout
@@ -71,6 +83,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="bottom">

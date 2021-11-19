@@ -79,18 +79,59 @@
                     android:textSize="18sp"
                     tools:text="Preço" />
 
-                <EditText
-                    android:id="@+id/itemQuantityInput"
-                    android:layout_width="100dp"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:ems="10"
-                    android:gravity="right"
-                    android:hint="Quantidade"
-                    android:imeOptions="actionGo"
-                    android:imeActionId="1"
-                    android:imeActionLabel="OK"
-                    android:inputType="number" />
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/itemLess"
+                        android:layout_width="32dp"
+                        android:layout_height="38dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/primary"
+                        android:elevation="0dp"
+                        android:paddingLeft="0dp"
+                        android:paddingTop="0dp"
+                        android:paddingRight="0dp"
+                        android:paddingBottom="0dp"
+                        android:text="-"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/itemQuantityInput"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:layout_width="52dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:clickable="false"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:imeActionId="1"
+                        android:imeActionLabel="OK"
+                        android:imeOptions="actionGo"
+                        android:inputType="number"
+                        android:longClickable="false"
+                        android:text="0" />
+
+                    <Button
+                        android:id="@+id/itemMore"
+                        android:layout_width="32dp"
+                        android:layout_height="38dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/primary"
+                        android:paddingLeft="0dp"
+                        android:paddingTop="0dp"
+                        android:paddingRight="0dp"
+                        android:paddingBottom="0dp"
+                        android:text="+"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
