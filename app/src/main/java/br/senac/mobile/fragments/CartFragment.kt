@@ -1,5 +1,6 @@
 package br.senac.mobile.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import kotlin.concurrent.thread
 import br.senac.mobile.models.CustomResponse
 import br.senac.mobile.models.OrderAddItem
 import br.senac.mobile.models.OrderCreate
+import br.senac.mobile.services.LOGIN_FILE
 import br.senac.mobile.utils.setSnackbar
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,6 +46,8 @@ class CartFragment : Fragment() {
         binding.finishButton.setOnClickListener {
             if (binding.cartLinearLayout.size != 0) {
                 createOrder()
+            } else {
+                setSnackbar(mainActivity, "Sacola vazia, adicione algum item")
             }
         }
 
@@ -100,8 +104,10 @@ class CartFragment : Fragment() {
 
     private fun createOrder() {
         val mainActivity = activity as AppCompatActivity
-        // TODO O ID DEVE SER PASSADO DINAMICAMENTE
-        val orderCreateBody = OrderCreate(1, 1)
+        val preferences = mainActivity.getSharedPreferences(LOGIN_FILE, Context.MODE_PRIVATE)
+        val userId = preferences.getString("userId", "") as String
+
+        val orderCreateBody = OrderCreate(1, userId.toInt())
 
         val callback = object: Callback<Int> {
             override fun onResponse(call: Call<Int>, response: Response<Int>) {

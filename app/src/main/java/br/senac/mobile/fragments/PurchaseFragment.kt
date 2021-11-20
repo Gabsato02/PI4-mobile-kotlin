@@ -1,5 +1,6 @@
 package br.senac.mobile.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import br.senac.mobile.databinding.FragmentPurchaseBinding
 import br.senac.mobile.databinding.PurchaseCardBinding
 import br.senac.mobile.models.Order
 import br.senac.mobile.services.API
+import br.senac.mobile.services.LOGIN_FILE
 import br.senac.mobile.utils.getResponseMessage
 import br.senac.mobile.utils.setSnackbar
 import com.squareup.picasso.Picasso
@@ -115,7 +117,9 @@ class PurchaseFragment : Fragment() {
 
         }
 
-        API().order.getOrder().enqueue(callback)
+        val preferences = mainActivity.getSharedPreferences(LOGIN_FILE, Context.MODE_PRIVATE)
+        val userId = preferences.getString("userId", "") as String
+        API().order.getOrder(userId.toInt()).enqueue(callback)
         binding.purchaseProgressBar.visibility = View.VISIBLE
     }
 

@@ -7,14 +7,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/container"
+    <FrameLayout
+        android:id="@+id/loginConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:tag="history"
         tools:context=".fragments.HistoryFragment">
+
+        <TextView
+            android:id="@+id/emptyHistoryCartText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:gravity="center"
+            android:text="Nenhum registro de compra encontrado, entre na loja e faça seu primeiro pedido!"
+            android:textSize="18sp"
+            android:visibility="gone" />
 
         <ScrollView
             android:id="@+id/historyScrollView"

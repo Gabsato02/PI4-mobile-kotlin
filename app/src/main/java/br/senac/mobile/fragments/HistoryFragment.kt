@@ -1,5 +1,6 @@
 package br.senac.mobile.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -12,6 +13,7 @@ import br.senac.mobile.databinding.HistoryCardBinding
 import br.senac.mobile.databinding.HistoryItemCardBinding
 import br.senac.mobile.models.Order
 import br.senac.mobile.services.API
+import br.senac.mobile.services.LOGIN_FILE
 import br.senac.mobile.utils.formatDate
 import br.senac.mobile.utils.getResponseMessage
 import br.senac.mobile.utils.setSnackbar
@@ -48,53 +50,58 @@ class HistoryFragment : Fragment() {
 
     private fun updateUI(orderList: List<Order>) {
         binding.historyLinearLayout.removeAllViews()
-        orderList?.forEach { it ->
-            val historyCardBinding = HistoryCardBinding.inflate(layoutInflater)
-            val historyCardBindingId = it.id
+        if (orderList.isNotEmpty()) {
+            orderList?.forEach { it ->
+                val historyCardBinding = HistoryCardBinding.inflate(layoutInflater)
+                val historyCardBindingId = it.id
 
-            historyCardBinding.historyIdText.text = "#${it.id.toString()}"
-            historyCardBinding.historyDateText.text = formatDate(it.created_at)
-            historyCardBinding.historyNameText.text = it.store.name
-            historyCardBinding.historyPriceText.text = it.order_items.sumOf {
-                it.item.price * it.quantity
-            }.toString()
+                historyCardBinding.historyIdText.text = "#${it.id.toString()}"
+                historyCardBinding.historyDateText.text = formatDate(it.created_at)
+                historyCardBinding.historyNameText.text = it.store.name
+                historyCardBinding.historyPriceText.text = it.order_items.sumOf {
+                    it.item.price * it.quantity
+                }.toString()
 
-            it.order_items?.forEachIndexed { index, product ->
-                val historyItemCardBinding = HistoryItemCardBinding.inflate(layoutInflater)
-                historyItemCardBinding.root.tag = it.id
+                it.order_items?.forEachIndexed { index, product ->
+                    val historyItemCardBinding = HistoryItemCardBinding.inflate(layoutInflater)
+                    historyItemCardBinding.root.tag = it.id
 
-                historyItemCardBinding.historyItemNameText.text = product.item.name
-                historyItemCardBinding.historyItemPriceText.text = (product.item.price * product.quantity).toString()
-                Picasso
-                    .get()
-                    .load("${API().baseUrl}image/item/${product.item.id}")
-                    .error(R.drawable.logo)
-                    .into(historyItemCardBinding.historyItemImage, object : com.squareup.picasso.Callback {
-                        override fun onSuccess() {
-                            historyItemCardBinding.historyProgressBar.visibility = View.GONE
-                        }
+                    historyItemCardBinding.historyItemNameText.text = product.item.name
+                    historyItemCardBinding.historyItemPriceText.text = (product.item.price * product.quantity).toString()
+                    Picasso
+                        .get()
+                        .load("${API().baseUrl}image/item/${product.item.id}")
+                        .error(R.drawable.logo)
+                        .into(historyItemCardBinding.historyItemImage, object : com.squareup.picasso.Callback {
+                            override fun onSuccess() {
+                                historyItemCardBinding.historyProgressBar.visibility = View.GONE
+                            }
 
-                        override fun onError(e: Exception?) {
-                            historyItemCardBinding.historyProgressBar.visibility = View.GONE
-                        }
-                    })
+                            override fun onError(e: Exception?) {
+                                historyItemCardBinding.historyProgressBar.visibility = View.GONE
+                            }
+                        })
 
-                binding.historyLinearLayout.addView(historyItemCardBinding.root, index)
-            }
+                    binding.historyLinearLayout.addView(historyItemCardBinding.root, index)
+                }
 
-            historyCardBinding.historyLinearLayout.setOnClickListener {
-                binding.historyLinearLayout.forEach { itemView ->
-                    if (itemView.tag == historyCardBindingId) {
-                        if (itemView.visibility == View.VISIBLE) {
-                            itemView.visibility = View.GONE
-                        } else {
-                            itemView.visibility = View.VISIBLE
+                historyCardBinding.historyLinearLayout.setOnClickListener {
+                    binding.historyLinearLayout.forEach { itemView ->
+                        if (itemView.tag == historyCardBindingId) {
+                            if (itemView.visibility == View.VISIBLE) {
+                                itemView.visibility = View.GONE
+                            } else {
+                                itemView.visibility = View.VISIBLE
+                            }
                         }
                     }
                 }
-            }
 
-            binding.historyLinearLayout.addView(historyCardBinding.root, 0)
+                binding.historyLinearLayout.addView(historyCardBinding.root, 0)
+                binding.emptyHistoryCartText.visibility = View.GONE
+            }
+        } else {
+            binding.emptyHistoryCartText.visibility = View.VISIBLE
         }
     }
 
@@ -110,7 +117,7 @@ class HistoryFragment : Fragment() {
                     val orderList = response.body()
                     orderList?.let { updateUI(orderList) }
                 } else {
-                    setSnackbar(mainActivity, getResponseMessage(response.code()))
+                    binding.emptyHistoryCartText.visibility = View.VISIBLE
                 }
             }
 
@@ -123,7 +130,9 @@ class HistoryFragment : Fragment() {
 
         }
 
-        API().order.getOrder().enqueue(callback)
+        val preferences = mainActivity.getSharedPreferences(LOGIN_FILE, Context.MODE_PRIVATE)
+        val userId = preferences.getString("userId", "") as String
+        API().order.getOrder(userId.toInt()).enqueue(callback)
         binding.orderProgressBar.visibility = View.VISIBLE
     }
 }

@@ -9,3 +9,8 @@ data class User(
     val image: String? = null,
     val role: String,
 )
+
+data class Login(
+    val email: String,
+    val password: String,
+)

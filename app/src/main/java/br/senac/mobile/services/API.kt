@@ -5,8 +5,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class API {
-    val baseUrl = "http://192.168.15.12:8080/api/"
+const val LOGIN_FILE = "login"
+
+class API() {
+    val baseUrl = "http://192.168.0.13:8080/api/"
     private val timeout = 30L
 
     private val retrofit: Retrofit

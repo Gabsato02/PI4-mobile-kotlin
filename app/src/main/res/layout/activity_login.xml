@@ -2,11 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
+    android:id="@+id/loginConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/red_texture"
     tools:context=".activities.login.LoginActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/loginProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/secondary"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/logo"
@@ -20,19 +34,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textErrorMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="center"
+        android:textColor="@color/ice"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/inputName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        tools:text="Credenciais inválidas" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputName"
         android:layout_width="280dp"
         android:layout_height="56dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="64dp"
         android:background="@drawable/old_golden_texture"
         android:foregroundGravity="center"
         android:gravity="center"
+        app:boxStrokeWidthFocused="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo">
+        app:layout_constraintTop_toBottomOf="@+id/textErrorMessage">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputName"
@@ -41,7 +73,7 @@
             android:background="@drawable/golden_texture"
             android:backgroundTint="@color/transparent"
             android:backgroundTintMode="add"
-            android:hint="Nome"
+            android:hint="E-mail"
             android:textColor="@color/primary"
             android:textColorLink="@color/primary" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -56,6 +88,7 @@
         android:background="@drawable/old_golden_texture"
         android:foregroundGravity="center"
         android:gravity="center"
+        app:boxStrokeWidthFocused="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputName"

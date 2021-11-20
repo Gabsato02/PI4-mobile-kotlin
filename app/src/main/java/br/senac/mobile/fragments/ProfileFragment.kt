@@ -1,5 +1,7 @@
 package br.senac.mobile.fragments
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,9 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import br.senac.mobile.R
+import br.senac.mobile.activities.login.LoginActivity
+import br.senac.mobile.activities.register.RegisterActivity
 import br.senac.mobile.databinding.FragmentProfileBinding
 import br.senac.mobile.models.User
 import br.senac.mobile.services.API
+import br.senac.mobile.services.LOGIN_FILE
 import br.senac.mobile.utils.getResponseMessage
 import br.senac.mobile.utils.setSnackbar
 import com.squareup.picasso.Picasso
@@ -50,6 +55,17 @@ class ProfileFragment : Fragment() {
 
         binding.swipeRefresh.setOnRefreshListener {
             getUserData()
+        }
+
+        binding.logoutButton.setOnClickListener {
+            val preferences = mainActivity.getSharedPreferences(LOGIN_FILE, Context.MODE_PRIVATE).edit()
+            preferences.putString("user", "")
+            preferences.putString("password", "")
+            preferences.putString("userId", "")
+            preferences.apply()
+
+            val intent = Intent(mainActivity, LoginActivity::class.java)
+            startActivity(intent)
         }
 
         return binding.root
@@ -103,8 +119,9 @@ class ProfileFragment : Fragment() {
             }
 
         }
-
-        API().user.getUser().enqueue(callback)
+        val preferences = mainActivity.getSharedPreferences(LOGIN_FILE, Context.MODE_PRIVATE)
+        val userId = preferences.getString("userId", "") as String
+        API().user.getUser(userId.toInt()).enqueue(callback)
         binding.profileProgressBar.visibility = View.VISIBLE
     }
 
