@@ -108,13 +108,18 @@ class MainActivity : AppCompatActivity() {
         if (isHome?.isVisible == false) {
             var tag = supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name
             when(tag) {
-                "cart" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavBagButton).setChecked(true)
-                "history" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHistoryButton).setChecked(true)
-                "profile" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavProfileButton).setChecked(true)
-                else -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHomeButton).setChecked(true)
+                "cart" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavBagButton).isChecked =
+                    true
+                "history" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHistoryButton).isChecked =
+                    true
+                "profile" -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavProfileButton).isChecked =
+                    true
+                else -> binding.bottomNavigationView.menu.findItem(R.id.bottomNavHomeButton).isChecked =
+                    true
             }
         } else {
-            binding.bottomNavigationView.menu.findItem(R.id.bottomNavHomeButton).setChecked(true)
+            binding.bottomNavigationView.menu.findItem(R.id.bottomNavHomeButton).isChecked =
+                true
         }
     }
 }
