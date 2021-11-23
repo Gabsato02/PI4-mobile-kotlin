@@ -50,7 +50,21 @@
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         tools:src="@tools:sample/avatars" />
+
                 </androidx.cardview.widget.CardView>
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="272dp"
+                    android:layout_marginTop="64dp"
+                    android:forceHasOverlappingRendering="@color/secondary"
+                    android:tint="@color/secondary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profileLinearLayout"
+                    app:srcCompat="@drawable/ic_baseline_edit_24" />
 
                 <LinearLayout
                     android:id="@+id/profileLinearLayout"
@@ -256,7 +270,7 @@
                     android:layout_marginEnd="64dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/traits_background"
-                    android:text="SAIR"
+                    android:text="DESLOGAR"
                     android:textColor="@color/primary"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"

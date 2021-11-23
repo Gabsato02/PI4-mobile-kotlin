@@ -1,13 +1,14 @@
 package br.senac.mobile.activities.register
 
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import br.senac.mobile.R
 import br.senac.mobile.activities.login.LoginActivity
-import br.senac.mobile.activities.main.MainActivity
 import br.senac.mobile.databinding.ActivityRegisterBinding
 import br.senac.mobile.models.User
 import br.senac.mobile.services.API
@@ -17,10 +18,14 @@ import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.provider.MediaStore
+import br.senac.mobile.utils.convertUriToBase64
 
 class RegisterActivity : AppCompatActivity() {
     lateinit var binding: ActivityRegisterBinding
+    var selectedImage = ""
     var activity = AppCompatActivity()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -28,6 +33,21 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.registerButton.setOnClickListener {
             prepareUserData()
+        }
+
+        binding.avatarCardView.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Inserir Avatar")
+                .setCancelable(true)
+                .setNeutralButton("Abrir galeria") { _: DialogInterface, _: Int ->
+                    val pickPhoto = Intent(
+                        Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    )
+                    startActivityForResult(pickPhoto, 1)
+                }
+                .create()
+                .show()
         }
 
         val intent = Intent(this, LoginActivity::class.java)
@@ -85,10 +105,11 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         if (!hasError) {
-            var newUser: User = User(
-                name = nicknameText.toString(),
-                email = emailText.toString(),
-                password = passwordText.toString(),
+            var newUser = User(
+                name = nicknameText,
+                email = emailText,
+                password = passwordText,
+                image = if (selectedImage.isNullOrEmpty()) null else selectedImage,
                 role = "user"
             )
             createUser(newUser)
@@ -101,5 +122,14 @@ class RegisterActivity : AppCompatActivity() {
             message,
             Snackbar.LENGTH_LONG
         ).show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            binding.avatarImageView.setImageURI(data?.data)
+            selectedImage = convertUriToBase64(this, data?.data)
+        }
     }
 }
