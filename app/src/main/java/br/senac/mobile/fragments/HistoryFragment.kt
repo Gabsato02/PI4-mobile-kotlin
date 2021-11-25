@@ -15,7 +15,6 @@ import br.senac.mobile.models.Order
 import br.senac.mobile.services.API
 import br.senac.mobile.services.LOGIN_FILE
 import br.senac.mobile.utils.formatDate
-import br.senac.mobile.utils.getResponseMessage
 import br.senac.mobile.utils.setSnackbar
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -58,17 +57,20 @@ class HistoryFragment : Fragment() {
                 historyCardBinding.historyIdText.text = "#${it.id.toString()}"
                 historyCardBinding.historyDateText.text = formatDate(it.created_at)
                 historyCardBinding.historyNameText.text = it.store.name
-                historyCardBinding.historyPriceText.text = it.order_items.sumOf {
+                val totalPrice = it.order_items.sumOf {
                     it.item.price * it.quantity
-                }.toString()
+                }
+                historyCardBinding.historyPriceText.text = "$totalPrice PO"
 
-                it.order_items?.forEachIndexed { index, product ->
+                    it.order_items?.forEachIndexed { index, product ->
                     val historyItemCardBinding = HistoryItemCardBinding.inflate(layoutInflater)
                     historyItemCardBinding.root.tag = it.id
 
-                    historyItemCardBinding.historyItemNameText.text = product.item.name
-                    historyItemCardBinding.historyItemPriceText.text = (product.item.price * product.quantity).toString()
-                    Picasso
+                    historyItemCardBinding.historyItemNameText.text = "${product.item.name} (x${product.quantity})"
+                    val itemTotalPrice = (product.item.price * product.quantity)
+                        historyItemCardBinding.historyItemPriceText.text = "$itemTotalPrice PO"
+
+                        Picasso
                         .get()
                         .load("${API().baseUrl}image/item/${product.item.id}")
                         .error(R.drawable.logo)

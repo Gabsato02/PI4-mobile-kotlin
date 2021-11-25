@@ -61,7 +61,7 @@
             android:layout_weight="1"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textColor="@color/primary"
             android:textSize="18sp"
             tools:text="Espada Bastarda" />
@@ -70,7 +70,6 @@
             android:id="@+id/historyItemPriceText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             android:textAlignment="viewEnd"

@@ -82,14 +82,16 @@
                     android:id="@+id/historyPriceText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:drawableEnd="@drawable/ic_coins_solid"
+                    android:drawablePadding="12dp"
+                    android:drawableTint="@color/text_golden"
                     android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
                     android:text="Preço"
                     android:textAlignment="textEnd"
                     android:textColor="@color/primary"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:paddingEnd="4dp" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

@@ -12,7 +12,6 @@ import br.senac.mobile.database.Database
 import br.senac.mobile.databinding.FragmentItemBinding
 import br.senac.mobile.databinding.TraitsCharacCardBinding
 import br.senac.mobile.models.Cart
-import br.senac.mobile.models.Category
 import br.senac.mobile.models.Item
 import br.senac.mobile.services.API
 import com.squareup.picasso.Picasso
@@ -23,7 +22,6 @@ import java.lang.Exception
 import kotlin.concurrent.thread
 import br.senac.mobile.utils.getResponseMessage
 import br.senac.mobile.utils.setSnackbar
-
 
 private const val ARG_PARAM1 = "itemId"
 

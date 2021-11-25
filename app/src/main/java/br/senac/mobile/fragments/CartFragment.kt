@@ -154,7 +154,7 @@ class CartFragment : Fragment() {
 
                             cartCardBinding.itemImage.setImageResource(R.drawable.sword)
                             cartCardBinding.itemNameText.text = it.name
-                            cartCardBinding.itemPriceText.text = it.price
+                            cartCardBinding.itemPriceText.text = "${it.price} PO"
                             cartCardBinding.itemQuantityInput.setText(it.quantity)
                             Picasso
                                 .get()

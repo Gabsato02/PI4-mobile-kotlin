@@ -14,8 +14,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.*
 import br.senac.mobile.R
 import br.senac.mobile.databinding.FragmentQrCodeBinding
