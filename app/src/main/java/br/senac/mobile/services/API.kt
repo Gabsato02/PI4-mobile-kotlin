@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 const val LOGIN_FILE = "login"
 
 class API() {
-    val baseUrl = "http://91d2-2804-431-cff7-e285-585-d288-4bf9-f8ea.ngrok.io/api/"
+    val baseUrl = "http://192.168.15.12:8080/api/"
     private val timeout = 30L
 
     private val retrofit: Retrofit

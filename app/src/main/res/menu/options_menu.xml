@@ -12,5 +12,5 @@
         android:icon="@drawable/ic_code_scanner_auto_focus_on"
         android:iconTint="@color/white"
         android:title="QR Code"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>

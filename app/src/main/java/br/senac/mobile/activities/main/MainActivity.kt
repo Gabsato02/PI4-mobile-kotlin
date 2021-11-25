@@ -74,6 +74,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            menu.findItem(R.id.scanner).isVisible = !hasFocus
+        }
+
         return true
     }
 
@@ -83,9 +87,6 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
                 .addToBackStack("home").commit()
             true
-        } else {
-            val scannerIcon = findViewById<View>(R.id.scanner)
-            scannerIcon.isVisible = false
         }
         return super.onOptionsItemSelected(item)
     }
