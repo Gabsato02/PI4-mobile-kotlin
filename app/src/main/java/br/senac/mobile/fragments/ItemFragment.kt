@@ -12,6 +12,7 @@ import br.senac.mobile.database.Database
 import br.senac.mobile.databinding.FragmentItemBinding
 import br.senac.mobile.databinding.TraitsCharacCardBinding
 import br.senac.mobile.models.Cart
+import br.senac.mobile.models.Category
 import br.senac.mobile.models.Item
 import br.senac.mobile.services.API
 import com.squareup.picasso.Picasso
@@ -29,6 +30,7 @@ private const val ARG_PARAM1 = "itemId"
 class ItemFragment: Fragment() {
     private var itemId: Int = 0
     private lateinit var binding: FragmentItemBinding
+    private var callItem: Call<Item>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +76,7 @@ class ItemFragment: Fragment() {
 
         if (item.traits.isNotEmpty()) {
             binding.itemFragTraitLabel.text = "Traços"
+            binding.itemFragTraitLinearLayout.addView(binding.itemFragTraitLabel)
             item.traits.forEach {
                 val traitsCard  = TraitsCharacCardBinding.inflate(layoutInflater)
                 traitsCard.traitsCharacCardNameText.text = it.name
@@ -84,6 +87,7 @@ class ItemFragment: Fragment() {
 
         if (item.characteristics.isNotEmpty()) {
             binding.itemFragCharacteristicLabel.text = "Características"
+            binding.itemFragCharacteristicLinearLayout.addView(binding.itemFragCharacteristicLabel)
             item.characteristics.forEach {
                 val characteristicCard = TraitsCharacCardBinding.inflate(layoutInflater)
                 characteristicCard.traitsCharacCardNameText.text = "${it.name} - ${it.characteristics_value}"
@@ -148,8 +152,14 @@ class ItemFragment: Fragment() {
             }
         }
 
-        API().item.getItem(itemId).enqueue(callback)
+        callItem = API().item.getItem(itemId)
+        callItem?.enqueue(callback)
         binding.itemFragCardProgressBar.visibility = View.VISIBLE
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        callItem?.cancel()
     }
 
     companion object {

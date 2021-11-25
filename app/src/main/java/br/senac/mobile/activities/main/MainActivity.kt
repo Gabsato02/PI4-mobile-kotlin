@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import br.senac.mobile.R
 import br.senac.mobile.databinding.ActivityMainBinding
 import android.view.MenuItem
+import android.view.View
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
 import br.senac.mobile.fragments.*
 
 
@@ -81,6 +83,9 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction().replace(R.id.mainFragmentContainer, fragment)
                 .addToBackStack("home").commit()
             true
+        } else {
+            val scannerIcon = findViewById<View>(R.id.scanner)
+            scannerIcon.isVisible = false
         }
         return super.onOptionsItemSelected(item)
     }

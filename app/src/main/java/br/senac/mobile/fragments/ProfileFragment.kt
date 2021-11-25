@@ -14,8 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.senac.mobile.R
 import br.senac.mobile.activities.login.LoginActivity
-import br.senac.mobile.activities.main.MainActivity
-import br.senac.mobile.activities.register.RegisterActivity
 import br.senac.mobile.databinding.FragmentProfileBinding
 import br.senac.mobile.models.User
 import br.senac.mobile.services.API
@@ -113,6 +111,7 @@ class ProfileFragment : Fragment() {
         binding.profileEmailTextInput.setText(userData.email)
 
         if (selectedImage.isNullOrBlank()) {
+            Picasso.get().invalidate("${API().baseUrl}image/user/${userData.id}")
             Picasso
                 .get()
                 .load("${API().baseUrl}image/user/${userData.id}")

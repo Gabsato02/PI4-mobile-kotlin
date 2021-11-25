@@ -50,21 +50,23 @@
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/drawable/separatorborder.xml" value="0.1" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/activity_main.xml" value="0.15489130434782608" />
-        <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/activity_register.xml" value="0.16032608695652173" />
+        <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/activity_register.xml" value="0.25" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/catalog_item.xml" value="0.33" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/catalog_title.xml" value="0.22" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/category_card.xml" value="0.22" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/fragment_cart.xml" value="0.2" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/fragment_history.xml" value="0.22" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/fragment_home.xml" value="0.22" />
-        <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/fragment_item.xml" value="0.2" />
+        <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/fragment_item.xml" value="0.22" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/fragment_profile.xml" value="0.25" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/fragment_purchase.xml" value="0.18704710144927536" />
+        <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/fragment_qr_code.xml" value="0.15579710144927536" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/fragment_store_catalog.xml" value="0.22" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/history_card.xml" value="0.33" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/history_item_card.xml" value="0.33" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/purchase_card.xml" value="0.22" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/shopping_cart_card.xml" value="0.33" />
+        <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/layout/traits_charac_card.xml" value="0.15579710144927536" />
         <entry key="..\:/Users/Acer/AndroidStudioProjects/PI4-mobile-kotlin/app/src/main/res/menu/options_menu.xml" value="0.20416666666666666" />
       </map>
     </option>

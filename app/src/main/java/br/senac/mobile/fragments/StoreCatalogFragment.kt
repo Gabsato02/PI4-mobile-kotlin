@@ -100,7 +100,12 @@ class StoreCatalogFragment : Fragment() {
         }
 
         val catalogTitleBinding = CatalogTitleBinding.inflate(layoutInflater)
-        catalogTitleBinding.catalogTitleText.text = "${itemsList.size} resultados para: $catalogQuery"
+        val searchMessage = when(itemsList.size) {
+            0 -> "Não foram encontrados resultados para a pesquisa: $catalogQuery"
+            1 -> "${itemsList.size} resultado para: $catalogQuery"
+            else -> "${itemsList.size} resultados para: $catalogQuery"
+        }
+        catalogTitleBinding.catalogTitleText.text = searchMessage
         binding.catalogContentLinearLayout.addView(catalogTitleBinding.root)
 
         itemsList.forEach { item -> updateItemsList(item) }
