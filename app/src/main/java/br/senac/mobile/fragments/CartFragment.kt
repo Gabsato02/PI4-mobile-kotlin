@@ -141,64 +141,50 @@ class CartFragment : Fragment() {
 
         thread {
             val cartItems = db.cartDao().list()
-            var currentCartList = emptyList<String>()
             var totalPrice = 0
 
             mainActivity.runOnUiThread {
                 if (cartItems.isNotEmpty()) {
                     cartItems.forEach {
-                        if (!currentCartList.contains(it.itemId.toString())) {
-                            currentCartList += it.itemId.toString()
-                            val cartCardBinding = ShoppingCartCardBinding.inflate(layoutInflater)
-                            totalPrice += it.price.toInt() * it.quantity.toInt()
+                        val cartCardBinding = ShoppingCartCardBinding.inflate(layoutInflater)
+                        totalPrice += it.price.toInt() * it.quantity.toInt()
 
-                            cartCardBinding.itemImage.setImageResource(R.drawable.sword)
-                            cartCardBinding.itemNameText.text = it.name
-                            cartCardBinding.itemPriceText.text = "${it.price} PO"
-                            cartCardBinding.itemQuantityInput.setText(it.quantity)
-                            Picasso
-                                .get()
-                                .load("${API().baseUrl}image/item/${it.itemId}")
-                                .error(R.drawable.no_image)
-                                .into(
-                                    cartCardBinding.itemImage,
-                                    object : com.squareup.picasso.Callback {
-                                        override fun onSuccess() {
-                                            cartCardBinding.cartImageProgressBar.visibility = View.GONE
-                                        }
-
-                                        override fun onError(e: Exception?) {
-                                            cartCardBinding.cartImageProgressBar.visibility = View.GONE
-                                        }
-                                    })
-
-                            cartCardBinding.itemDeleteText.setOnClickListener { _ ->
-                                thread { it.itemId?.let { itemId -> db.cartDao().delete(itemId) } }
-                                getCartItems()
-                            }
-
-                            cartCardBinding.itemText.setOnClickListener { _ ->
-                                val fragment = ItemFragment.newInstance(it.itemId)
-                                parentFragmentManager.beginTransaction()
-                                    .replace(R.id.mainFragmentContainer, fragment)
-                                    .addToBackStack("cart").commit()
-                                true
-                            }
-
-                            cartCardBinding.itemLess.setOnClickListener { _ ->
-                                val quantity = (it.quantity.toInt() - 1)
-                                if (quantity > 0) {
-                                    thread {
-                                        it.id?.let { itemId ->
-                                            db.cartDao().update(quantity, itemId)
-                                        }
+                        cartCardBinding.itemImage.setImageResource(R.drawable.sword)
+                        cartCardBinding.itemNameText.text = it.name
+                        cartCardBinding.itemPriceText.text = "${it.price} PO"
+                        cartCardBinding.itemQuantityInput.setText(it.quantity)
+                        Picasso
+                            .get()
+                            .load("${API().baseUrl}image/item/${it.itemId}")
+                            .error(R.drawable.no_image)
+                            .into(
+                                cartCardBinding.itemImage,
+                                object : com.squareup.picasso.Callback {
+                                    override fun onSuccess() {
+                                        cartCardBinding.cartImageProgressBar.visibility = View.GONE
                                     }
-                                    getCartItems()
-                                }
-                            }
 
-                            cartCardBinding.itemMore.setOnClickListener { _ ->
-                                val quantity = (it.quantity.toInt() + 1)
+                                    override fun onError(e: Exception?) {
+                                        cartCardBinding.cartImageProgressBar.visibility = View.GONE
+                                    }
+                                })
+
+                        cartCardBinding.itemDeleteText.setOnClickListener { _ ->
+                            thread { it.itemId?.let { itemId -> db.cartDao().delete(itemId) } }
+                            getCartItems()
+                        }
+
+                        cartCardBinding.itemText.setOnClickListener { _ ->
+                            val fragment = ItemFragment.newInstance(it.itemId)
+                            parentFragmentManager.beginTransaction()
+                                .replace(R.id.mainFragmentContainer, fragment)
+                                .addToBackStack("cart").commit()
+                            true
+                        }
+
+                        cartCardBinding.itemLess.setOnClickListener { _ ->
+                            val quantity = (it.quantity.toInt() - 1)
+                            if (quantity > 0) {
                                 thread {
                                     it.id?.let { itemId ->
                                         db.cartDao().update(quantity, itemId)
@@ -206,14 +192,24 @@ class CartFragment : Fragment() {
                                 }
                                 getCartItems()
                             }
-
-                            binding.cartLinearLayout.addView(cartCardBinding.root, 0)
                         }
-                        binding.cartProgressBar.visibility = View.GONE
-                        binding.swipeRefresh.isRefreshing = false
-                        binding.priceText.text = "Total: ${totalPrice.toString()} PO"
-                        binding.emptyCartText.visibility = View.GONE
+
+                        cartCardBinding.itemMore.setOnClickListener { _ ->
+                            val quantity = (it.quantity.toInt() + 1)
+                            thread {
+                                it.id?.let { itemId ->
+                                    db.cartDao().update(quantity, itemId)
+                                }
+                            }
+                            getCartItems()
+                        }
+
+                        binding.cartLinearLayout.addView(cartCardBinding.root, 0)
                     }
+                    binding.cartProgressBar.visibility = View.GONE
+                    binding.swipeRefresh.isRefreshing = false
+                    binding.priceText.text = "Total: ${totalPrice.toString()} PO"
+                    binding.emptyCartText.visibility = View.GONE
                 } else {
                     binding.cartProgressBar.visibility = View.GONE
                     binding.swipeRefresh.isRefreshing = false

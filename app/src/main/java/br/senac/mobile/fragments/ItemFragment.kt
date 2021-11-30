@@ -116,7 +116,14 @@ class ItemFragment: Fragment() {
             )
 
             thread {
-                db.cartDao().insert(cart)
+                val cartItems = db.cartDao().list()
+                if (cartItems.isNotEmpty()) {
+                    cartItems.forEach {
+                        if(it.itemId != cart.itemId) db.cartDao().insert(cart)
+                    }
+                } else {
+                    db.cartDao().insert(cart)
+                }
             }
 
             val fragment = CartFragment()
